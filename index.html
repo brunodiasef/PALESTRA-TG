@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OPERAÇÃO CHASSI BLINDADO — TFM // TIRO DE GUERRA</title>
+<!-- GAUNTLET LOOP v4: Construtor ✔ | Crítico de Briefing ✔ | Crítico de Sistema ✔ | Crítico Visual ✔ -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/rajdhani/600.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/rajdhani/700.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/chakra-petch/500.css">
@@ -15,58 +16,53 @@
 :root{
   --bg:#0D110E; --bg2:#172017; --panel:#121A13; --card:#151E15;
   --border:#2A3A27; --border2:#3A4F35;
-  --amber:#F59E0B; --green:#22C55E; --red:#EF4444;
+  --amber:#F59E0B; --green:#22C55E; --red:#EF4444; --orange:#F97316; --yellow:#FACC15;
   --text:#D8E0D6; --muted:#8FA08C; --dim:#5C6B58;
   --f-disp:'Rajdhani','Chakra Petch',sans-serif;
   --f-tech:'Chakra Petch',monospace;
   --f-body:'Inter',system-ui,sans-serif;
   --topH:58px; --botH:64px;
+  --mira:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23F59E0B' stroke-width='2'%3E%3Ccircle cx='16' cy='16' r='9'/%3E%3Cpath d='M16 1v8M16 23v8M1 16h8M23 16h8'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='1.6' fill='%23F59E0B'/%3E%3C/svg%3E") 16 16, crosshair;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
-body{
-  background:var(--bg); color:var(--text); font-family:var(--f-body);
-  font-size:15px; line-height:1.55;
-  background-image:
-    radial-gradient(1200px 500px at 85% -10%, rgba(34,197,94,.06), transparent 60%),
-    radial-gradient(900px 500px at 10% 110%, rgba(245,158,11,.05), transparent 60%);
-}
-button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:none}
+body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.55}
+button{font-family:inherit;cursor:var(--mira);color:inherit;background:none;border:none}
 ::selection{background:var(--amber);color:#0D110E}
+button,.dot,.cdot,input[type=range],.ex-item,.veh,.zoom-clone,.pil-item,.menu-item,.car-item.is-side{cursor:var(--mira)}
+input[type=range]::-webkit-slider-thumb{cursor:var(--mira)}
+input[type=range]::-moz-range-thumb{cursor:var(--mira)}
 
 /* ============ SCANLINE / CRT ============ */
-.scanlines{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.16;
+.scanlines{position:fixed;inset:0;z-index:700;pointer-events:none;opacity:.16;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 3px);}
-.scanbar{position:fixed;left:0;right:0;height:90px;z-index:201;pointer-events:none;opacity:.05;
-  background:linear-gradient(180deg,transparent,var(--green),transparent);
-  animation:sweep 9s linear infinite;}
+.scanbar{position:fixed;left:0;right:0;height:90px;z-index:701;pointer-events:none;opacity:.05;
+  background:linear-gradient(180deg,transparent,var(--green),transparent);animation:sweep 9s linear infinite;}
 @keyframes sweep{from{top:-15%}to{top:110%}}
 
-/* ============ BARRA DE PROGRESSO TOPO ============ */
+/* ============ PROGRESSO TOPO ============ */
 #progressTrack{position:fixed;top:0;left:0;right:0;height:3px;z-index:300;background:#101710}
 #progressFill{height:100%;width:12.5%;background:linear-gradient(90deg,var(--green),var(--amber));
   box-shadow:0 0 10px rgba(245,158,11,.6);transition:width .5s cubic-bezier(.6,0,.2,1)}
 
-/* ============ HEADER HUD ============ */
+/* ============ HEADER ============ */
 header{position:fixed;top:3px;left:0;right:0;height:var(--topH);z-index:150;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:0 16px;background:linear-gradient(180deg,rgba(13,17,14,.97),rgba(13,17,14,.88));
-  border-bottom:1px solid var(--border);}
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 16px;
+  background:linear-gradient(180deg,rgba(13,17,14,.97),rgba(13,17,14,.88));border-bottom:1px solid var(--border);}
 .hud-left{display:flex;align-items:center;gap:12px;min-width:0}
-.led{width:9px;height:9px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 8px var(--green);animation:blink 2.2s infinite;flex:none}
+.led{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.2s infinite;flex:none}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 .hud-brand{font-family:var(--f-tech);font-size:12px;letter-spacing:.14em;color:var(--muted);white-space:nowrap}
 .hud-brand b{color:var(--amber);font-weight:700}
 .hud-mid{font-family:var(--f-tech);font-size:12px;letter-spacing:.18em;color:var(--dim)}
 .hud-right{display:flex;align-items:center;gap:10px}
-#clock{font-family:var(--f-tech);font-size:12px;color:var(--green);letter-spacing:.1em;
-  border:1px solid var(--border);padding:5px 10px;background:#0F150F}
+.clockbox{display:flex;align-items:baseline;gap:6px;font-family:var(--f-tech);font-size:13px;color:var(--green);
+  letter-spacing:.1em;border:1px solid var(--border);padding:5px 10px;background:#0F150F}
+.clockbox i{font-style:normal;font-size:8px;letter-spacing:.24em;color:var(--dim)}
 
-/* ============ BOTÕES TÁTICOS ============ */
-.btn{font-family:var(--f-tech);font-weight:700;font-size:12.5px;letter-spacing:.12em;
-  padding:10px 18px;border:1px solid var(--amber);color:var(--amber);
-  background:rgba(245,158,11,.07);position:relative;transition:all .2s;text-transform:uppercase}
+/* ============ BOTÕES ============ */
+.btn{font-family:var(--f-tech);font-weight:700;font-size:12.5px;letter-spacing:.12em;padding:10px 18px;
+  border:1px solid var(--amber);color:var(--amber);background:rgba(245,158,11,.07);transition:all .2s;text-transform:uppercase}
 .btn:hover{background:var(--amber);color:#0D110E;box-shadow:0 0 18px rgba(245,158,11,.45)}
 .btn:active{transform:translateY(1px)}
 .btn-green{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.07)}
@@ -76,9 +72,9 @@ header{position:fixed;top:3px;left:0;right:0;height:var(--topH);z-index:150;
 .btn-ghost{border-color:var(--border2);color:var(--muted);background:transparent}
 .btn-ghost:hover{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.06);box-shadow:none}
 .btn:disabled{opacity:.3;pointer-events:none}
-.btn-big{font-size:15px;padding:14px 30px}
+.btn-big{font-size:17px;padding:17px 42px}
 
-/* ============ CANTOS TÁTICOS (corner brackets) ============ */
+/* ============ CANTOS TÁTICOS ============ */
 .corners{position:relative}
 .corners::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:
@@ -95,8 +91,7 @@ header{position:fixed;top:3px;left:0;right:0;height:var(--topH);z-index:150;
 /* ============ MENU SUSPENSO ============ */
 .hud-menu{position:relative}
 #menuPanel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,92vw);
-  background:rgba(13,17,14,.98);border:1px solid var(--border2);z-index:400;
-  max-height:70vh;overflow-y:auto;
+  background:rgba(13,17,14,.98);border:1px solid var(--border2);z-index:400;max-height:70vh;overflow-y:auto;
   transform-origin:top;transform:scaleY(0);opacity:0;transition:transform .28s cubic-bezier(.6,0,.2,1),opacity .2s}
 #menuPanel.open{transform:scaleY(1);opacity:1}
 .mp-head{font-family:var(--f-tech);font-size:11px;letter-spacing:.2em;color:var(--amber);
@@ -113,41 +108,47 @@ header{position:fixed;top:3px;left:0;right:0;height:var(--topH);z-index:150;
 .st-current{color:var(--amber);border-color:var(--amber);background:rgba(245,158,11,.1)}
 .st-done{color:var(--green);border-color:var(--green);background:rgba(34,197,94,.1)}
 
-/* ============ DECK / SLIDES ============ */
+/* ============ DECK / SLIDES / PARALLAX ============ */
 #deck{position:fixed;top:calc(var(--topH) + 3px);bottom:var(--botH);left:0;right:0;overflow:hidden}
-.slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:34px 22px 50px;
+.slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:30px 22px 50px;
   opacity:0;visibility:hidden;transform:translateX(40px);
   transition:opacity .5s ease,transform .5s cubic-bezier(.6,0,.2,1),visibility 0s .5s;
   scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 .slide::-webkit-scrollbar{width:8px}
 .slide::-webkit-scrollbar-thumb{background:var(--border2)}
 .slide.active{opacity:1;visibility:visible;transform:translateX(0);transition-delay:0s}
-.wrap{max-width:1150px;margin:0 auto}
+.slide .wrap{max-width:1180px;margin:0 auto;position:relative;z-index:2}
+.slide-bg{position:absolute;left:-3%;right:-3%;top:-40%;height:200%;z-index:0;pointer-events:none;will-change:transform}
+.slide-bg-img{position:absolute;inset:0;background-size:cover;background-position:center}
+.slide-bg-img::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(13,17,14,.78),rgba(13,17,14,.92) 55%,rgba(13,17,14,.96));}
+.kb{animation:kenburns 24s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.08)}}
 
-/* animação de entrada dos elementos */
 .fx{opacity:0}
 .slide.active .fx{animation:fxUp .6s cubic-bezier(.3,.7,.3,1) both;animation-delay:var(--d,0s)}
 @keyframes fxUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-/* ============ TIPOGRAFIA DE SLIDE ============ */
+/* ============ TIPOGRAFIA ============ */
 .slide-code{font-family:var(--f-tech);font-size:11px;letter-spacing:.24em;color:var(--green);
   display:inline-flex;align-items:center;gap:8px;margin-bottom:12px}
 .slide-code::before{content:"";width:26px;height:1px;background:var(--green)}
 h1.slide-title,h2.slide-title{font-family:var(--f-disp);font-weight:700;text-transform:uppercase;
-  letter-spacing:.04em;line-height:1.05;color:#F2F6F0;
-  font-size:clamp(1.7rem,4.6vw,3.1rem)}
+  letter-spacing:.04em;line-height:1.05;color:#F2F6F0;font-size:clamp(1.7rem,4.4vw,2.9rem)}
 .slide-title .hl{color:var(--amber)}
-.slide-sub{color:var(--muted);font-size:clamp(.85rem,1.6vw,1rem);max-width:760px;margin-top:10px}
+.slide-sub{color:var(--muted);font-size:clamp(.86rem,1.5vw,1rem);max-width:820px;margin-top:10px}
 
 .badge{font-family:var(--f-tech);font-size:10px;letter-spacing:.14em;padding:4px 9px;border:1px solid;white-space:nowrap}
 .b-amber{color:var(--amber);border-color:var(--amber)}
 .b-green{color:var(--green);border-color:var(--green)}
 .b-red{color:var(--red);border-color:var(--red)}
+.b-orange{color:var(--orange);border-color:var(--orange)}
+.b-yellow{color:var(--yellow);border-color:var(--yellow)}
 .b-dim{color:var(--muted);border-color:var(--border2)}
 
 /* ============ CARDS GENÉRICOS ============ */
 .tcard{background:linear-gradient(180deg,var(--card),var(--panel));border:1px solid var(--border);
-  padding:18px;position:relative;transition:border-color .2s,transform .2s}
+  padding:18px;position:relative;transition:border-color .2s,box-shadow .2s}
 .tcard:hover{border-color:var(--border2)}
 .tcard h3{font-family:var(--f-disp);font-weight:700;font-size:1.05rem;letter-spacing:.06em;
   text-transform:uppercase;color:#EDF3EB;display:flex;align-items:center;gap:9px}
@@ -155,40 +156,86 @@ h1.slide-title,h2.slide-title{font-family:var(--f-disp);font-weight:700;text-tra
 .tcard p{font-size:.86rem;color:var(--muted);margin-top:8px}
 .tcard p b{color:var(--text)}
 
+/* ============ CARROSSEL ============ */
+.car-shell{position:relative;margin-top:26px}
+.carousel{overflow:hidden;width:100%}
+.car-track{display:flex;gap:20px;align-items:center;will-change:transform;transition:transform .65s cubic-bezier(.6,0,.2,1)}
+.car-item{flex:none;transition:filter .55s,opacity .55s,transform .55s}
+.car-item.is-side{filter:blur(2.5px);opacity:.55;transform:scale(.95)}
+.car-item.is-far{filter:blur(5px);opacity:0;transform:scale(.9)}
+.car-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:46px;height:46px;font-size:18px;
+  border:1px solid var(--amber);color:var(--amber);background:rgba(13,17,14,.9);
+  display:flex;align-items:center;justify-content:center;transition:all .2s}
+.car-btn:hover{background:var(--amber);color:#0D110E;box-shadow:0 0 16px rgba(245,158,11,.5)}
+.car-btn.prev{left:-4px}.car-btn.next{right:-4px}
+.car-dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
+.cdot{width:30px;height:8px;background:#1E2A1D;border:1px solid var(--border);transition:all .25s}
+.cdot.on{background:var(--amber);border-color:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.5)}
+.cdot:hover{border-color:var(--green)}
+
 /* ============ SLIDE 1 — HERO ============ */
 .hero{min-height:100%;display:flex;flex-direction:column;justify-content:center;position:relative}
-.hero-bg{position:absolute;inset:-4%;z-index:-1;
-  background:linear-gradient(180deg,rgba(13,17,14,.62),rgba(13,17,14,.94) 80%),
-  url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/187620094-3806-4060-9439-90c81110ef8e.png') center/cover no-repeat;
-  animation:kenburns 22s ease-in-out infinite alternate}
-@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.07)}}
-.hero-tags{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.hero-quote{margin:26px 0 8px;padding:16px 20px;border-left:3px solid var(--amber);
-  background:rgba(245,158,11,.06);font-family:var(--f-disp);font-weight:600;
-  font-size:clamp(1.1rem,2.6vw,1.6rem);letter-spacing:.03em;color:#F5E9D2;max-width:640px}
-.hero-meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px}
-.hm{font-family:var(--f-tech);font-size:11px;letter-spacing:.14em;color:var(--dim)}
-.hm b{display:block;color:var(--green);font-size:14px;margin-top:3px}
+.hero-tags{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.hero-tags .badge{font-size:13px;padding:8px 14px}
+#slide1 .slide-title{font-size:clamp(2.6rem,7.5vw,4.6rem)}
+.hero-quote{margin:30px 0 10px;padding:22px 26px;border-left:4px solid var(--amber);
+  background:rgba(245,158,11,.07);font-family:var(--f-disp);font-weight:600;
+  font-size:clamp(1.4rem,3.4vw,2.2rem);letter-spacing:.03em;color:#F5E9D2;max-width:760px}
+.hero-meta{display:flex;gap:40px;flex-wrap:wrap;margin-top:32px}
+.hm{font-family:var(--f-tech);font-size:13px;letter-spacing:.14em;color:var(--dim)}
+.hm b{display:block;color:var(--green);font-size:1.45rem;margin-top:4px}
+#slide1 .slide-sub{font-size:clamp(1rem,1.8vw,1.2rem)}
 
 /* ============ SLIDE 2 — AMEAÇAS ============ */
-.threat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:26px}
-.threat{--cc:var(--red)}
-.threat .tname{font-family:var(--f-tech);font-weight:700;font-size:.92rem;letter-spacing:.08em;color:#FBE3E3}
-.threat .talias{font-size:.75rem;color:var(--red);font-family:var(--f-tech);letter-spacing:.1em;margin-top:2px}
-.meter{display:flex;gap:3px;margin-top:10px}
-.meter i{height:5px;flex:1;background:#241515}
-.meter i.on{background:var(--red);box-shadow:0 0 6px rgba(239,68,68,.5)}
-.alert-crit{margin-top:16px;border:1px solid var(--red);background:
-  repeating-linear-gradient(-45deg,rgba(239,68,68,.09) 0 12px,rgba(239,68,68,.02) 12px 24px);
-  padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
-.alert-crit .x{font-family:var(--f-tech);font-weight:700;color:var(--red);font-size:1.2rem;flex:none}
-.alert-crit h4{font-family:var(--f-tech);color:var(--red);letter-spacing:.14em;font-size:.8rem}
-.alert-crit p{color:#E8D5D5;font-size:.88rem;margin-top:5px}
+.threat{--cc:var(--tc);border-top:3px solid var(--tc)}
+.car-threat{min-height:340px;display:flex;flex-direction:column;
+  transition:min-height .5s cubic-bezier(.6,0,.2,1),box-shadow .5s,border-color .5s}
+.car-item.is-center .car-threat{min-height:480px;border-color:var(--tc);box-shadow:0 0 28px -6px var(--tc)}
+.threat .tname{font-family:var(--f-tech);font-weight:700;font-size:1.25rem;letter-spacing:.08em;color:#FBE3E3}
+.threat .talias{font-size:.92rem;color:var(--tc);font-family:var(--f-tech);letter-spacing:.1em;margin-top:6px}
+.car-threat p{font-size:1.08rem;line-height:1.6;margin-top:14px}
+.meter{display:flex;gap:4px;margin-top:16px}
+.meter i{height:8px;flex:1;background:#1C231C}
+.meter i.on{background:var(--tc);box-shadow:0 0 6px var(--tc)}
+.threat .badge{margin-top:16px;font-size:12px;padding:7px 14px}
 
-/* ============ SLIDE 3 — VIATURA ============ */
-.veh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:26px}
+.alert-crit{margin-top:20px;border:2px solid var(--red);
+  background-image:repeating-linear-gradient(-45deg,rgba(239,68,68,.09) 0 12px,rgba(239,68,68,.02) 12px 24px);
+  padding:18px 20px;display:flex;gap:16px;align-items:flex-start;animation:alertPulse 1s ease-in-out infinite}
+@keyframes alertPulse{
+  0%,100%{box-shadow:0 0 0 rgba(239,68,68,0);border-color:var(--red);background-color:rgba(239,68,68,.04)}
+  50%{box-shadow:0 0 30px rgba(239,68,68,.55);border-color:#FF8A8A;background-color:rgba(239,68,68,.18)}}
+.alert-crit .x{font-family:var(--f-tech);font-weight:700;color:var(--red);font-size:1.5rem;flex:none}
+.alert-crit h4{display:inline-block;font-family:var(--f-tech);color:#000;background:var(--yellow);
+  letter-spacing:.14em;font-size:.85rem;padding:5px 12px;box-shadow:0 0 14px rgba(250,204,21,.35)}
+.alert-crit p{color:#F0DCDC;font-size:.92rem;margin-top:8px}
+
+/* ============ SLIDE 3 — VIATURA + ZOOM ============ */
+.veh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:24px}
 .veh .vtag{font-family:var(--f-tech);font-size:10px;letter-spacing:.16em;color:var(--green)}
 .veh h3{margin-top:6px}
+.veh:hover{border-color:var(--amber);box-shadow:0 0 18px rgba(245,158,11,.12)}
+.veh.ghost{opacity:0!important;pointer-events:none}
+.zoom-clone{position:fixed;z-index:600;overflow:auto;
+  transition:top .55s cubic-bezier(.6,0,.2,1),left .55s cubic-bezier(.6,0,.2,1),width .55s cubic-bezier(.6,0,.2,1),height .55s cubic-bezier(.6,0,.2,1);
+  box-shadow:0 30px 90px rgba(0,0,0,.75),0 0 40px rgba(245,158,11,.18)}
+/* ===== ZOOM: TIPOGRAFIA AMPLIADA E PROPORCIONAL ===== */
+.zoom-clone{padding:34px 36px}
+.zoom-clone h3{font-size:1.9rem;gap:12px;margin-top:10px}
+.zoom-clone h3 svg{width:30px;height:30px}
+.zoom-clone h3 span{font-size:1.05rem !important}
+.zoom-clone .vtag{font-size:14px;letter-spacing:.22em}
+.zoom-clone p{font-size:1.22rem !important;line-height:1.75 !important;margin-top:16px}
+.zoom-clone .btn{font-size:15px;padding:13px 26px;margin-top:6px}
+.zoom-clone .sim-stage{height:290px;margin-top:22px}
+.zoom-clone .spring-svg{width:215px;height:260px}
+.zoom-clone .sim-read{font-size:13px;letter-spacing:.12em}
+.zoom-clone .sim-meter{height:9px;margin-top:18px}
+.zoom-clone .corners::after{background-size:auto}
+#zoomBackdrop{position:fixed;inset:0;z-index:540;background:rgba(8,11,8,.55);
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;pointer-events:none;transition:opacity .4s}
+#zoomBackdrop.show{opacity:1;pointer-events:auto}
+.zoom-hint{margin-top:14px;font-family:var(--f-tech);font-size:10.5px;letter-spacing:.18em;color:var(--dim)}
 .sim-card{--cc:var(--green)}
 .sim-stage{margin-top:14px;background:#0C120C;border:1px solid var(--border);height:170px;
   display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
@@ -208,105 +255,120 @@ h1.slide-title,h2.slide-title{font-family:var(--f-disp);font-weight:700;text-tra
 .sim-meter i{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--green),var(--amber));transition:width 1.4s ease}
 .sim-on .sim-meter i{width:60%}
 
-/* ============ SLIDE 4 — MITOS (flip) ============ */
-.myth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:28px}
-.myth-card{perspective:1400px;min-height:430px}
-.myth-inner{position:relative;width:100%;height:100%;min-height:430px;
-  transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
+/* ============ SLIDE 4 — MITOS ============ */
+.myth-card{height:min(66vh,620px);min-height:460px;width:100%;perspective:1400px}
+.myth-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
 .myth-card.revealed .myth-inner{transform:rotateY(180deg)}
 .myth-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  display:flex;flex-direction:column;padding:18px;border:1px solid var(--border)}
+  display:flex;flex-direction:column;padding:0;border:1px solid var(--border);overflow:hidden}
 .myth-front{background:linear-gradient(180deg,#1A1212,#140F0F);
   background-image:repeating-linear-gradient(-45deg,rgba(239,68,68,.05) 0 10px,transparent 10px 20px)}
 .myth-back{background:linear-gradient(180deg,#0F1A12,#0D140E);transform:rotateY(180deg);border-color:var(--green)}
-.myth-tape{align-self:flex-start;font-family:var(--f-tech);font-weight:700;font-size:10.5px;
-  letter-spacing:.16em;color:#fff;background:var(--red);padding:5px 10px;
-  transform:rotate(-1.5deg);box-shadow:0 2px 8px rgba(0,0,0,.5)}
-.myth-back .myth-tape{background:var(--green);color:#06130A;transform:rotate(1.5deg)}
-.myth-quote{font-family:var(--f-disp);font-weight:600;font-size:1.25rem;line-height:1.25;
-  color:#F3E2E2;margin:16px 0;letter-spacing:.02em}
-.myth-truth{font-size:.87rem;color:#C9E5CF;flex:1}
+.myth-body{padding:32px 38px 20px;flex:1;display:flex;flex-direction:column;overflow-y:auto}
+.myth-tape{flex:none;width:100%;text-align:center;font-family:var(--f-tech);font-weight:700;
+  font-size:15px;letter-spacing:.34em;padding:15px 6px;background:var(--red);color:#fff;
+  box-shadow:0 -6px 22px rgba(239,68,68,.35)}
+.myth-back .myth-tape{background:var(--green);color:#06130A;box-shadow:0 -6px 22px rgba(34,197,94,.35)}
+.myth-quote{font-family:var(--f-disp);font-weight:600;font-size:clamp(1.7rem,3.1vw,2.4rem);line-height:1.18;
+  color:#F3E2E2;margin:4px 0 20px;letter-spacing:.02em}
+.myth-orig{font-size:.98rem;color:var(--muted)}
+.myth-truth{font-size:1.12rem;line-height:1.7;color:#C9E5CF;flex:1}
 .myth-truth b{color:var(--green)}
-.myth-foot{margin-top:auto;padding-top:14px}
-.myth-id{font-family:var(--f-tech);font-size:10px;color:var(--dim);letter-spacing:.14em;margin-top:10px}
+.myth-foot{margin-top:auto;padding-top:20px}
+.myth-id{font-family:var(--f-tech);font-size:11.5px;color:var(--dim);letter-spacing:.14em;margin-top:14px}
 
-/* ============ SLIDE 5 — PILARES (acordeão) ============ */
-.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:26px}
-.pillar{--cc:var(--green);border:1px solid var(--border);background:linear-gradient(180deg,var(--card),var(--panel))}
-.pillar-head{padding:16px 18px;display:flex;align-items:center;gap:14px}
-.p-num{font-family:var(--f-tech);font-weight:700;font-size:1.5rem;color:var(--green);opacity:.85;flex:none}
+/* ============ SLIDE 5 — PILARES ============ */
+.pil-layout{display:grid;grid-template-columns:minmax(300px,370px) 1fr;gap:16px;margin-top:24px;align-items:start}
+.pil-list{display:flex;flex-direction:column;gap:12px}
+.pil-item{display:flex;gap:14px;align-items:center;text-align:left;padding:18px 16px;
+  border:1px solid var(--border);background:linear-gradient(180deg,var(--card),var(--panel));transition:all .25s;--cc:var(--border2)}
+.pil-item:hover{border-color:var(--border2);transform:translateX(4px)}
+.pil-item.active{border-color:var(--amber);background:rgba(245,158,11,.07);
+  box-shadow:0 0 22px rgba(245,158,11,.15);--cc:var(--amber);transform:translateX(6px)}
+.p-num{font-family:var(--f-tech);font-weight:700;font-size:1.6rem;color:var(--green);opacity:.85;flex:none}
+.pil-item.active .p-num{color:var(--amber);opacity:1}
 .p-title{flex:1;min-width:0}
-.p-title h3{font-family:var(--f-disp);font-weight:700;font-size:1.02rem;letter-spacing:.05em;text-transform:uppercase}
-.p-title span{font-size:.75rem;color:var(--amber);font-family:var(--f-tech);letter-spacing:.1em}
-.dossier{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.6,0,.2,1)}
-.pillar.open .dossier{grid-template-rows:1fr}
-.dossier>div{overflow:hidden}
-.dossier-body{padding:0 18px 18px;border-top:1px dashed var(--border2);margin:0 0 0}
-.d-block{margin-top:12px}
-.d-block h5{font-family:var(--f-tech);font-size:10px;letter-spacing:.18em;color:var(--red);margin-bottom:4px}
-.d-block:nth-child(2) h5{color:var(--amber)}
-.d-block:nth-child(3) h5{color:var(--green)}
-.d-block p{font-size:.83rem;color:var(--muted)}
-.pillar-foot{padding:0 18px 16px}
+.p-title h3{font-family:var(--f-disp);font-weight:700;font-size:1.02rem;letter-spacing:.05em;text-transform:uppercase;color:#EDF3EB}
+.p-title span{font-size:.72rem;color:var(--amber);font-family:var(--f-tech);letter-spacing:.1em}
+.pil-ico{font-family:var(--f-tech);font-weight:700;font-size:1.3rem;color:var(--amber);flex:none;
+  width:30px;height:30px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center}
+.pil-stage{min-height:480px;border:1px solid var(--border);--cc:var(--green);
+  background:linear-gradient(180deg,rgba(18,26,19,.92),rgba(18,26,19,.88));padding:30px;position:relative}
+.pil-empty{height:100%;min-height:420px;display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;text-align:center;color:var(--dim)}
+.pil-empty p{font-family:var(--f-tech);font-size:12px;letter-spacing:.18em;max-width:300px;line-height:2}
+.pil-detail.in{animation:fxUp .45s cubic-bezier(.3,.7,.3,1) both}
+.pd-head{display:flex;gap:18px;align-items:center;padding-bottom:18px;border-bottom:1px dashed var(--border2)}
+.pd-head .p-num{font-size:2.6rem}
+.pd-head h3{font-family:var(--f-disp);font-weight:700;font-size:1.6rem;letter-spacing:.05em;text-transform:uppercase;color:#F2F6F0}
+.pd-head span{font-family:var(--f-tech);font-size:.78rem;color:var(--amber);letter-spacing:.14em}
+.d-block{margin-top:18px}
+.d-block h5{font-family:var(--f-tech);font-size:11px;letter-spacing:.2em;color:var(--red);margin-bottom:6px}
+.d-block:nth-child(3) h5{color:var(--amber)}
+.d-block:nth-child(4) h5{color:var(--green)}
+.d-block p{font-size:.95rem;color:var(--muted)}
+.d-block p b{color:var(--text)}
 
-/* ============ SLIDE 6 — CRONÔMETRO ============ */
-.ops-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:26px}
-.test-brief{border-left:3px solid var(--green);padding:10px 14px;background:rgba(34,197,94,.05);margin-top:12px}
-.test-brief h4{font-family:var(--f-tech);font-size:.82rem;letter-spacing:.12em;color:var(--green)}
-.test-brief p{font-size:.83rem;color:var(--muted);margin-top:4px}
-.crit-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+/* ============ SLIDE 6 ============ */
+.ops-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:24px}
+.test-brief{display:flex;gap:18px;border-left:5px solid var(--green);padding:22px 24px;
+  background:rgba(34,197,94,.06);margin-top:16px}
+.tb-num{font-family:var(--f-tech);font-weight:700;font-size:1.6rem;color:var(--green);
+  border:2px solid var(--green);width:58px;height:58px;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,.08)}
+.test-brief h4{font-family:var(--f-tech);font-size:1.1rem;letter-spacing:.12em;color:var(--green)}
+.test-brief p{font-size:1.02rem;color:var(--muted);margin-top:6px}
+.timer-col{display:flex;flex-direction:column;gap:14px}
 .timer-card{--cc:var(--amber);display:flex;flex-direction:column;align-items:center;padding:22px}
-.presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
-.preset{font-family:var(--f-tech);font-size:10.5px;letter-spacing:.1em;padding:8px 12px;
-  border:1px solid var(--border2);color:var(--muted);transition:all .2s}
+.presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.preset{font-family:var(--f-tech);font-size:10.5px;letter-spacing:.1em;padding:8px 12px;border:1px solid var(--border2);color:var(--muted);transition:all .2s}
 .preset.armed{border-color:var(--amber);color:var(--amber);background:rgba(245,158,11,.1);box-shadow:0 0 10px rgba(245,158,11,.25)}
 .ring-wrap{position:relative;width:190px;height:190px}
 .ring{width:100%;height:100%}
 .ring-bg{fill:none;stroke:#1E2A1D;stroke-width:7}
-.ring-fg{fill:none;stroke:var(--green);stroke-width:7;stroke-linecap:butt;
-  stroke-dasharray:339.292;transition:stroke .3s}
+.ring-fg{fill:none;stroke:var(--green);stroke-width:7;stroke-dasharray:339.292;transition:stroke .3s}
 .ring-fg.low{stroke:var(--red)}
 #timerDisplay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   font-family:var(--f-tech);font-weight:700;font-size:2.3rem;color:var(--green);letter-spacing:.04em;text-shadow:0 0 14px rgba(34,197,94,.4)}
 #timerDisplay.low{color:var(--red);text-shadow:0 0 14px rgba(239,68,68,.5)}
 #timerDisplay small{font-size:.6rem;letter-spacing:.3em;color:var(--dim);font-weight:500}
-.tbar{width:100%;height:5px;background:#1A241A;margin:16px 0 6px;overflow:hidden}
+.tbar{width:100%;height:5px;background:#1A241A;margin:14px 0 6px;overflow:hidden}
 #timerBar{height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--amber));transition:width .1s linear}
-#timerStatus{font-family:var(--f-tech);font-size:10.5px;letter-spacing:.16em;color:var(--muted);margin:8px 0 16px;min-height:14px;text-align:center}
+#timerStatus{font-family:var(--f-tech);font-size:10.5px;letter-spacing:.16em;color:var(--muted);margin:8px 0 14px;min-height:14px;text-align:center}
 .t-ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.crit-col{display:flex;flex-direction:column;gap:10px}
+.crit-block{font-family:var(--f-tech);font-size:.88rem;letter-spacing:.1em;padding:13px 16px;border:1px solid;display:flex;gap:10px;align-items:center}
+.cb-green{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.08)}
+.cb-amber{border-color:var(--amber);color:var(--amber);background:rgba(245,158,11,.08)}
+.cb-red{border-color:var(--red);color:#FCA5A5;background:rgba(239,68,68,.1)}
 
-/* ============ SLIDE 7 — CHECKLIST + CALCULADORA ============ */
-.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
-.ex-item{display:flex;align-items:center;gap:14px;padding:13px 14px;border:1px solid var(--border);
-  background:var(--card);cursor:pointer;transition:all .2s;user-select:none}
-.ex-item:hover{border-color:var(--border2)}
+/* ============ SLIDE 7 ============ */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+.ex-item{display:flex;align-items:center;gap:18px;padding:22px 20px;border:1px solid var(--border);
+  background:rgba(21,30,21,.92);transition:all .2s;user-select:none}
+.ex-item:hover{border-color:var(--border2);transform:translateX(4px)}
 .ex-item input{display:none}
-.ex-box{width:22px;height:22px;border:2px solid var(--border2);flex:none;position:relative;transition:all .2s}
+.ex-box{width:28px;height:28px;border:2px solid var(--border2);flex:none;position:relative;transition:all .2s}
 .ex-item input:checked ~ .ex-box{border-color:var(--green);background:rgba(34,197,94,.15)}
-.ex-item input:checked ~ .ex-box::after{content:"✓";position:absolute;inset:0;display:flex;
-  align-items:center;justify-content:center;color:var(--green);font-weight:700;font-size:14px}
+.ex-item input:checked ~ .ex-box::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:700;font-size:17px}
 .ex-item input:checked ~ .ex-info .ex-name{color:var(--green);text-decoration:line-through}
-.ex-name{font-family:var(--f-disp);font-weight:700;letter-spacing:.05em;font-size:.95rem;text-transform:uppercase}
-.ex-dose{font-family:var(--f-tech);font-size:10.5px;color:var(--amber);letter-spacing:.1em;margin-top:2px}
+.ex-name{font-family:var(--f-disp);font-weight:700;letter-spacing:.05em;font-size:1.2rem;text-transform:uppercase}
+.ex-dose{font-family:var(--f-tech);font-size:.8rem;color:var(--amber);letter-spacing:.12em;margin-top:4px}
 .ex-info{flex:1}
-.ex-prog{display:flex;align-items:center;gap:12px;margin-top:16px}
-.ex-prog .bar{flex:1;height:6px;background:#1A241A;overflow:hidden}
+.ex-item + .ex-item{margin-top:12px}
+.ex-prog{display:flex;align-items:center;gap:12px;margin-top:18px}
+.ex-prog .bar{flex:1;height:7px;background:#1A241A;overflow:hidden}
 #exBar{height:100%;width:0;background:var(--green);transition:width .4s;box-shadow:0 0 8px rgba(34,197,94,.5)}
-#exCount{font-family:var(--f-tech);color:var(--green);font-size:12px;letter-spacing:.14em}
-#exReady{display:none;margin-top:12px;font-family:var(--f-tech);font-size:11px;letter-spacing:.16em;
-  color:#06130A;background:var(--green);padding:8px 12px;text-align:center}
+#exCount{font-family:var(--f-tech);color:var(--green);font-size:13px;letter-spacing:.14em}
+#exReady{display:none;margin-top:12px;font-family:var(--f-tech);font-size:11px;letter-spacing:.16em;color:#06130A;background:var(--green);padding:9px 12px;text-align:center}
 #exReady.show{display:block;animation:fxUp .4s both}
-/* calculadora */
-.calc{--cc:var(--amber)}
+.calc{--cc:var(--amber);background:linear-gradient(180deg,rgba(21,30,21,.94),rgba(18,26,19,.92))}
 .calc-row{margin-top:18px}
 .calc-row label{font-family:var(--f-tech);font-size:10.5px;letter-spacing:.16em;color:var(--muted)}
 .calc-val{font-family:var(--f-tech);font-weight:700;color:var(--amber);font-size:1.05rem;margin-left:8px}
 input[type=range]{width:100%;margin-top:12px;-webkit-appearance:none;appearance:none;height:8px;
   background:linear-gradient(90deg,var(--green) 50%,#2A3A27 0);outline:none;border:1px solid var(--border)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--amber);
-  border:3px solid #0D110E;box-shadow:0 0 0 2px var(--amber),0 0 12px rgba(245,158,11,.5);cursor:grab}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:0;background:var(--amber);
-  border:3px solid #0D110E;box-shadow:0 0 0 2px var(--amber);cursor:grab}
+  border:3px solid #0D110E;box-shadow:0 0 0 2px var(--amber),0 0 12px rgba(245,158,11,.5)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:0;background:var(--amber);border:3px solid #0D110E;box-shadow:0 0 0 2px var(--amber)}
 .calc-out{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
 .co{border:1px solid var(--border);padding:12px;background:#0C120C;text-align:center}
 .co small{font-family:var(--f-tech);font-size:9.5px;letter-spacing:.16em;color:var(--dim);display:block}
@@ -317,14 +379,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:0;backg
 /* ============ SLIDE 8 ============ */
 .final{min-height:100%;display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center}
 .dir-chips{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:30px 0}
-.dir{border:1px solid var(--green);background:rgba(34,197,94,.06);padding:16px 22px;min-width:170px}
+.dir{border:1px solid var(--green);background:rgba(34,197,94,.08);padding:16px 22px;min-width:170px}
 .dir small{font-family:var(--f-tech);font-size:9.5px;letter-spacing:.2em;color:var(--muted);display:block}
 .dir b{font-family:var(--f-disp);font-size:1.6rem;color:var(--green);letter-spacing:.03em}
 .final-quote{font-family:var(--f-disp);font-weight:600;font-size:clamp(1.05rem,2.4vw,1.5rem);color:#E9F0E7;max-width:720px}
 .selva{font-family:var(--f-disp);font-weight:700;font-size:clamp(3rem,9vw,6rem);letter-spacing:.1em;
   color:var(--amber);text-shadow:0 0 30px rgba(245,158,11,.45);margin-top:26px}
 
-/* ============ CONTROLES INFERIORES ============ */
+/* ============ FOOTER ============ */
 footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
   display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px;
   background:linear-gradient(0deg,rgba(13,17,14,.98),rgba(13,17,14,.9));border-top:1px solid var(--border)}
@@ -338,17 +400,25 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 /* ============ RESPONSIVO ============ */
 @media(max-width:900px){
-  .ops-grid,.plan-grid{grid-template-columns:1fr}
+  .ops-grid,.plan-grid,.pil-layout{grid-template-columns:1fr}
   .hud-mid{display:none}
   .kbd-hint{display:none}
+  .pil-stage{min-height:320px}
+  .pil-empty{min-height:260px}
+}
+@media(max-width:680px){
+  .car-item.is-center .car-threat{min-height:430px}
 }
 @media(max-width:600px){
-  .slide{padding:24px 14px 40px}
+  .slide{padding:22px 12px 40px}
   .hud-brand span{display:none}
-  #clock{display:none}
+  .clockbox{display:none}
   .btn{padding:9px 12px;font-size:11px}
-  .myth-card,.myth-inner{min-height:460px}
-  .calc-out{grid-template-columns:1fr 1fr}
+  .myth-body{padding:22px 20px 14px}
+  .myth-quote{font-size:1.5rem}
+  .zoom-clone{padding:22px 20px}
+  .zoom-clone h3{font-size:1.45rem}
+  .zoom-clone p{font-size:1.05rem !important}
 }
 </style>
 </head>
@@ -357,16 +427,16 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 <div class="scanlines"></div>
 <div class="scanbar"></div>
 <div id="progressTrack"><div id="progressFill"></div></div>
+<div id="zoomBackdrop"></div>
 
-<!-- ================= HEADER ================= -->
 <header>
   <div class="hud-left">
     <span class="led"></span>
     <div class="hud-brand"><b>TG</b> // PAINEL DE COMANDO <span>— TFM · PREVENÇÃO DE BAIXAS</span></div>
   </div>
-  <div class="hud-mid" id="hudMid">CANAL TÁTICO SEGURO · CRIPTOGRAFIA ATIVA</div>
+  <div class="hud-mid">CANAL TÁTICO SEGURO · CRIPTOGRAFIA ATIVA</div>
   <div class="hud-right">
-    <span id="clock">00:00:00Z</span>
+    <span class="clockbox"><span id="clock">--:--:--</span><i>HORA LOCAL</i></span>
     <button class="btn btn-ghost" id="fsBtn" title="Tela cheia (F)">⛶ TELA CHEIA</button>
     <div class="hud-menu">
       <button class="btn" id="menuBtn" aria-haspopup="true" aria-expanded="false">☰ ÍNDICE DE OPERAÇÕES ▾</button>
@@ -378,12 +448,11 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
   </div>
 </header>
 
-<!-- ================= DECK ================= -->
 <main id="deck">
 
 <!-- ========== SLIDE 1 ========== -->
-<section class="slide" data-title="BRIEFING INICIAL">
-  <div class="hero-bg"></div>
+<section class="slide" id="slide1" data-title="BRIEFING INICIAL">
+  <div class="slide-bg"><div class="slide-bg-img kb" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/187620094-3806-4060-9439-90c81110ef8e.png')"></div></div>
   <div class="wrap hero">
     <div class="hero-tags fx" style="--d:.05s">
       <span class="badge b-amber">TFM</span><span class="badge b-green">PREVENÇÃO DE BAIXAS</span><span class="badge b-dim">TIRO DE GUERRA</span>
@@ -397,8 +466,9 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
       <div class="hm">DURAÇÃO DA SESSÃO<b>20 MIN</b></div>
       <div class="hm">EFETIVO<b>PELOTÃO TG</b></div>
       <div class="hm">RECURSO NECESSÁRIO<b>PÁTIO + CORPO</b></div>
+      <div class="hm">OBJETIVO<b>TAF 100% APTO</b></div>
     </div>
-    <div class="fx" style="--d:.7s;margin-top:30px">
+    <div class="fx" style="--d:.7s;margin-top:36px">
       <button class="btn btn-green btn-big" id="startMission">▶ INICIAR MISSÃO</button>
     </div>
   </div>
@@ -406,41 +476,54 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 2 ========== -->
 <section class="slide" data-title="DIAGNÓSTICO DE CAMPO">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/147f83714-ccaf-4164-93ac-fa63dd3659cd.png')"></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 02/08 — O PROBLEMA</div>
     <h2 class="slide-title fx" style="--d:.15s">O DIAGNÓSTICO DO <span class="hl">CAMPO DE BATALHA</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">O inimigo invisível do TAF e das Marchas não atira: ele se acumula a cada passada sem estrutura. Identificação das 4 ameaças principais:</p>
-    <div class="threat-grid">
-      <div class="tcard threat corners fx" style="--d:.3s">
-        <div class="tname">⚠ SÍNDROME DO ESTRESSE TIBIAL</div>
-        <div class="talias">“CANELITE” — DOR NA BORDA INTERNA DA TÍBIA</div>
-        <p>Impacto repetido sem musculatura para dissipar a carga. A nº 1 em baixas de TFM.</p>
-        <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
-        <span class="badge b-red" style="margin-top:10px">AMEAÇA: CRÍTICA</span>
-      </div>
-      <div class="tcard threat corners fx" style="--d:.4s">
-        <div class="tname">⚠ FASCITE PLANTAR</div>
-        <div class="talias">DOR NO CALCANHAR / SOLA — PIOR AO ACORDAR</div>
-        <p>Solo duro + coturno + arco sem suporte = microlesões na fáscia do pé.</p>
-        <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
-        <span class="badge b-red" style="margin-top:10px">AMEAÇA: ALTA</span>
-      </div>
-      <div class="tcard threat corners fx" style="--d:.5s">
-        <div class="tname">⚠ TENDINITE PATELAR</div>
-        <div class="talias">“JOELHO DE SALTADOR” — DOR ANTERIOR</div>
-        <p>Desnivelamentos e frenagens sobrecarregam o tendão quando o quadril é fraco.</p>
-        <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
-        <span class="badge b-amber" style="margin-top:10px">AMEAÇA: ALTA</span>
-      </div>
-      <div class="tcard threat corners fx" style="--d:.6s">
-        <div class="tname">⚠ LOMBALGIA</div>
-        <div class="talias">DOR LOMBAR EM MARCHAS COM CARGA</div>
-        <p>Core fraco + mochila de 15 kg = tronco colapsado e lombar em sobrecarga contínua.</p>
-        <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
-        <span class="badge b-amber" style="margin-top:10px">AMEAÇA: MÉDIA</span>
-      </div>
+    <p class="slide-sub fx" style="--d:.25s">O inimigo invisível do TAF e das Marchas não atira: ele se acumula a cada passada sem estrutura. Use as setas para varrer as 4 ameaças.</p>
+
+    <div class="car-shell fx" style="--d:.3s">
+      <button class="car-btn prev" aria-label="Anterior">◀</button>
+      <div class="carousel" id="carThreats"><div class="car-track">
+
+        <div class="car-item"><div class="tcard threat car-threat corners" style="--tc:#EF4444">
+          <div class="tname">⚠ SÍNDROME DO ESTRESSE TIBIAL</div>
+          <div class="talias">“CANELITE” — DOR NA BORDA INTERNA DA TÍBIA</div>
+          <p>Impacto repetido sem musculatura para dissipar a carga. A nº 1 em baixas de TFM.</p>
+          <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+          <span class="badge b-red">AMEAÇA: CRÍTICA</span>
+        </div></div>
+
+        <div class="car-item"><div class="tcard threat car-threat corners" style="--tc:#F97316">
+          <div class="tname">⚠ FASCITE PLANTAR</div>
+          <div class="talias">DOR NO CALCANHAR / SOLA — PIOR AO ACORDAR</div>
+          <p>Solo duro + coturno + arco sem suporte = microlesões na fáscia do pé.</p>
+          <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+          <span class="badge b-orange">AMEAÇA: ALTA</span>
+        </div></div>
+
+        <div class="car-item"><div class="tcard threat car-threat corners" style="--tc:#F97316">
+          <div class="tname">⚠ TENDINITE PATELAR</div>
+          <div class="talias">“JOELHO DE SALTADOR” — DOR ANTERIOR</div>
+          <p>Desnivelamentos e frenagens sobrecarregam o tendão quando o quadril é fraco.</p>
+          <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+          <span class="badge b-orange">AMEAÇA: ALTA</span>
+        </div></div>
+
+        <div class="car-item"><div class="tcard threat car-threat corners" style="--tc:#FACC15">
+          <div class="tname">⚠ LOMBALGIA</div>
+          <div class="talias">DOR LOMBAR EM MARCHAS COM CARGA</div>
+          <p>Core fraco + mochila de 15 kg = tronco colapsado e lombar em sobrecarga contínua.</p>
+          <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <span class="badge b-yellow">AMEAÇA: MÉDIA</span>
+        </div></div>
+
+      </div></div>
+      <button class="car-btn next" aria-label="Próximo">▶</button>
     </div>
-    <div class="alert-crit corners fx" style="--d:.75s">
+    <div class="car-dots" id="dotsThreats"></div>
+
+    <div class="alert-crit corners fx" style="--d:.5s;--cc:var(--red)">
       <div class="x">✖</div>
       <div>
         <h4>ERRO CRÍTICO DETECTADO NO PELOTÃO</h4>
@@ -452,27 +535,31 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 3 ========== -->
 <section class="slide" data-title="MECÂNICA DA VIATURA">
-  <div class="wrap">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1b691dea9-4b42-478f-abad-07b01d6986b0.png')"></div></div>
+  <div class="wrap" id="vehWrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 03/08 — ANALOGIA DO COMBATE</div>
     <h2 class="slide-title fx" style="--d:.15s">A MECÂNICA DA <span class="hl">VIATURA</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">Seu corpo é a viatura da operação. Entenda por que só o motor não vence a missão:</p>
+    <p class="slide-sub fx" style="--d:.25s">Seu corpo é a viatura da operação. Entenda por que só o motor não vence a missão.</p>
+    <div class="zoom-hint fx" style="--d:.3s">▸ CLIQUE EM QUALQUER CARD PARA AMPLIAR A INTELIGÊNCIA — CLIQUE NOVAMENTE PARA RECOLHER</div>
     <div class="veh-grid">
-      <div class="tcard veh corners fx" style="--d:.3s;--cc:var(--amber)">
+      <div class="tcard veh corners fx zoomable" style="--d:.35s;--cc:var(--amber)">
         <span class="vtag" style="color:var(--amber)">SISTEMA 01</span>
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 21C7 17 3 13.5 3 9.5A5 5 0 0 1 12 6a5 5 0 0 1 9 3.5c0 4-4 7.5-9 11.5z"/></svg>O MOTOR <span style="color:var(--dim);font-size:.8rem">(CORAÇÃO / PULMÃO)</span></h3>
         <p><b>Ganho no aeróbico.</b> Rodagem e intervalado elevam o VO₂máx e a resistência. Mas um motor potente num chassi trincado <b>quebra a viatura mais rápido</b>.</p>
+        <p>O sistema cardiorrespiratório responde rápido ao treino — em 4–6 semanas o fôlego melhora. Estrutura (osso, tendão, ligamento) leva <b>meses</b> para se adaptar. Por isso a blindagem começa agora.</p>
       </div>
-      <div class="tcard veh corners fx" style="--d:.4s;--cc:var(--green)">
+      <div class="tcard veh corners fx zoomable" style="--d:.45s;--cc:var(--green)">
         <span class="vtag">SISTEMA 02</span>
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M4 17l6-10 4 6 6-9"/><path d="M4 21h16"/></svg>O CHASSI &amp; SUSPENSÃO <span style="color:var(--dim);font-size:.8rem">(MÚSCULOS / TENDÕES)</span></h3>
         <p><b>Ganho na força.</b> A cada passada, pernas absorvem <b>3 a 5× o peso corporal</b>. Só músculo e tendão fortes seguram esse impacto — corrida não constrói essa blindagem.</p>
+        <p>É a suspensão que mantém a viatura rodando em terreno ruim: coturno, asfalto, terra e carga externa. Chassi reforçado = menos baixa, mais missão cumprida.</p>
       </div>
-      <div class="tcard veh sim-card corners fx" style="--d:.5s" id="springSim">
+      <div class="tcard veh sim-card corners fx zoomable" style="--d:.55s">
         <span class="vtag">SISTEMA 03 — INTERATIVO</span>
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>O EFEITO MOLA DE AÇO</h3>
         <p>Tendões fortes funcionam como molas: armazenam energia no impacto e <b>devolvem a cada passada</b> — mais velocidade gastando menos oxigênio.</p>
         <div class="sim-stage">
-          <div class="sim-read" id="simRead">▸ AGUARDANDO SIMULAÇÃO DO EFEITO MOLA…</div>
+          <div class="sim-read">▸ AGUARDANDO SIMULAÇÃO DO EFEITO MOLA…</div>
           <svg class="spring-svg" viewBox="0 0 120 150">
             <g class="boot-g"><rect x="35" y="8" width="50" height="22" fill="#2A3A27" stroke="#F59E0B" stroke-width="2"/><text x="60" y="23" font-size="10" fill="#F59E0B" text-anchor="middle" font-family="monospace">CARGA</text></g>
             <path class="spring-coil" d="M60 38 L40 48 L80 58 L40 68 L80 78 L40 88 L80 98 L40 108 L80 118 L60 128" fill="none" stroke="#22C55E" stroke-width="4" stroke-linejoin="round"/>
@@ -482,7 +569,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
         </div>
         <div class="sim-meter"><i></i></div>
         <p style="font-family:var(--f-tech);font-size:10px;letter-spacing:.14em;color:var(--dim);margin-top:6px">ENERGIA ELÁSTICA DEVOLVIDA: ATÉ ~60%</p>
-        <div style="margin-top:12px"><button class="btn btn-green" id="simBtn">▶ SIMULAR EFEITO MOLA</button></div>
+        <div style="margin-top:12px"><button class="btn btn-green simToggle">▶ SIMULAR EFEITO MOLA</button></div>
       </div>
     </div>
   </div>
@@ -490,161 +577,153 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 4 ========== -->
 <section class="slide" data-title="DESCLASSIFICAÇÃO DE MITOS">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1091de02f-34f6-4a1f-adf9-210b9cc9b188.png')"></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 04/08 — INTELIGÊNCIA</div>
     <h2 class="slide-title fx" style="--d:.15s">DESCLASSIFICAÇÃO DE <span class="hl">MITOS</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">Inteligência contaminada no alojamento. Clique em <b style="color:var(--green)">DESCLASSIFICAR &amp; REVELAR VERDADE</b> para acessar a doutrina científica.</p>
-    <div class="myth-grid">
-      <div class="myth-card fx" style="--d:.3s">
-        <div class="myth-inner">
-          <div class="myth-face myth-front corners" style="--cc:var(--red)">
-            <span class="myth-tape">[ MITO POPULAR ]</span>
-            <div class="myth-quote">“Treino de força deixa o corredor pesado e lento.”</div>
-            <p style="font-size:.8rem;color:var(--muted)">Origem: observação equivocada de fisiculturismo aplicada ao esporte de endurance.</p>
-            <div class="myth-id">REGISTRO #M-01 · INTELIGÊNCIA NÃO CONFIRMADA</div>
-            <div class="myth-foot"><button class="btn btn-green myth-reveal">🔓 DESCLASSIFICAR &amp; REVELAR VERDADE</button></div>
+    <p class="slide-sub fx" style="--d:.25s">Inteligência contaminada no alojamento. Use as setas para navegar e clique em <b style="color:var(--green)">DESCLASSIFICAR &amp; REVELAR VERDADE</b> para acessar a doutrina científica.</p>
+
+    <div class="car-shell fx" style="--d:.3s">
+      <button class="car-btn prev" aria-label="Anterior">◀</button>
+      <div class="carousel" id="carMyths"><div class="car-track">
+
+        <div class="car-item"><div class="myth-card">
+          <div class="myth-inner">
+            <div class="myth-face myth-front corners" style="--cc:var(--red)">
+              <div class="myth-body">
+                <div class="myth-quote">“Treino de força deixa o corredor pesado e lento.”</div>
+                <p class="myth-orig">Origem: observação equivocada de fisiculturismo aplicada ao esporte de endurance.</p>
+                <div class="myth-id">REGISTRO #M-01 · INTELIGÊNCIA NÃO CONFIRMADA</div>
+                <div class="myth-foot"><button class="btn btn-green myth-reveal">🔓 DESCLASSIFICAR &amp; REVELAR VERDADE</button></div>
+              </div>
+              <div class="myth-tape">[ MITO POPULAR ]</div>
+            </div>
+            <div class="myth-face myth-back corners" style="--cc:var(--green)">
+              <div class="myth-body">
+                <p class="myth-truth">Força pesada <b>melhora a economia de corrida em 2–4%</b> e aumenta a potência relativa. Corredores de elite agacham <b>1,5–2× o peso corporal</b> sem ficar “pesados”. Músculo treinado é <b>blindagem</b>, não lastro. O que deixa lento é gordura em excesso e treino mal programado — não a força.</p>
+                <div class="myth-foot"><button class="btn btn-ghost myth-relock">🔒 RECLASSIFICAR</button></div>
+              </div>
+              <div class="myth-tape">[ VERDADE TÁTICA ]</div>
+            </div>
           </div>
-          <div class="myth-face myth-back corners" style="--cc:var(--green)">
-            <span class="myth-tape">[ VERDADE TÁTICA ]</span>
-            <p class="myth-truth">Força pesada <b>melhora a economia de corrida em 2–4%</b> e aumenta a potência relativa. Corredores de elite agacham <b>1,5–2× o peso corporal</b> sem ficar “pesados”. Músculo treinado é <b>blindagem</b>, não lastro.</p>
-            <div class="myth-foot"><button class="btn btn-ghost myth-relock">🔒 RECLASSIFICAR</button></div>
+        </div></div>
+
+        <div class="car-item"><div class="myth-card">
+          <div class="myth-inner">
+            <div class="myth-face myth-front corners" style="--cc:var(--red)">
+              <div class="myth-body">
+                <div class="myth-quote">“Corredor só deve treinar com carga leve e 30 repetições.”</div>
+                <p class="myth-orig">Origem: confusão entre resistência muscular local e estímulo de proteção estrutural.</p>
+                <div class="myth-id">REGISTRO #M-02 · INTELIGÊNCIA NÃO CONFIRMADA</div>
+                <div class="myth-foot"><button class="btn btn-green myth-reveal">🔓 DESCLASSIFICAR &amp; REVELAR VERDADE</button></div>
+              </div>
+              <div class="myth-tape">[ MITO POPULAR ]</div>
+            </div>
+            <div class="myth-face myth-back corners" style="--cc:var(--green)">
+              <div class="myth-body">
+                <p class="myth-truth">Resistência o recruta já ganha <b>correndo</b>. Para blindar osso e tendão o estímulo é <b>6–12 repetições com carga desafiadora</b>, progressiva, 2–3× por semana. Carga leve demais não sinaliza adaptação ao tecido: é <b>manutenção da fragilidade</b>. A regra é: última repetição difícil, técnica intacta.</p>
+                <div class="myth-foot"><button class="btn btn-ghost myth-relock">🔒 RECLASSIFICAR</button></div>
+              </div>
+              <div class="myth-tape">[ VERDADE TÁTICA ]</div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="myth-card fx" style="--d:.42s">
-        <div class="myth-inner">
-          <div class="myth-face myth-front corners" style="--cc:var(--red)">
-            <span class="myth-tape">[ MITO POPULAR ]</span>
-            <div class="myth-quote">“Corredor só deve treinar com carga leve e 30 repetições.”</div>
-            <p style="font-size:.8rem;color:var(--muted)">Origem: confusão entre resistência muscular local e estímulo de proteção estrutural.</p>
-            <div class="myth-id">REGISTRO #M-02 · INTELIGÊNCIA NÃO CONFIRMADA</div>
-            <div class="myth-foot"><button class="btn btn-green myth-reveal">🔓 DESCLASSIFICAR &amp; REVELAR VERDADE</button></div>
+        </div></div>
+
+        <div class="car-item"><div class="myth-card">
+          <div class="myth-inner">
+            <div class="myth-face myth-front corners" style="--cc:var(--red)">
+              <div class="myth-body">
+                <div class="myth-quote">“Se está doendo a canela, basta ignorar e correr mais que passa.”</div>
+                <p class="myth-orig">Origem: cultura do “no pain, no gain” aplicada a tecido que não se regenera sob carga.</p>
+                <div class="myth-id">REGISTRO #M-03 · INTELIGÊNCIA NÃO CONFIRMADA</div>
+                <div class="myth-foot"><button class="btn btn-green myth-reveal">🔓 DESCLASSIFICAR &amp; REVELAR VERDADE</button></div>
+              </div>
+              <div class="myth-tape">[ MITO POPULAR ]</div>
+            </div>
+            <div class="myth-face myth-back corners" style="--cc:var(--green)">
+              <div class="myth-body">
+                <p class="myth-truth">Dor é <b>luz de alerta no painel</b>. Dor na canela que piora com o treino vira <b>fratura por estresse</b>: de 2 semanas de ajuste para <b>3 meses de baixa</b>. Protocolo correto: reportar ao monitor, reduzir impacto, manter força dos pilares e retomar progressivamente.</p>
+                <div class="myth-foot"><button class="btn btn-ghost myth-relock">🔒 RECLASSIFICAR</button></div>
+              </div>
+              <div class="myth-tape">[ VERDADE TÁTICA ]</div>
+            </div>
           </div>
-          <div class="myth-face myth-back corners" style="--cc:var(--green)">
-            <span class="myth-tape">[ VERDADE TÁTICA ]</span>
-            <p class="myth-truth">Resistência o recruta já ganha <b>correndo</b>. Para blindar osso e tendão o estímulo é <b>6–12 repetições com carga desafiadora</b>, progressiva, 2–3× por semana. Leve demais = <b>manutenção da fragilidade</b>.</p>
-            <div class="myth-foot"><button class="btn btn-ghost myth-relock">🔒 RECLASSIFICAR</button></div>
-          </div>
-        </div>
-      </div>
-      <div class="myth-card fx" style="--d:.54s">
-        <div class="myth-inner">
-          <div class="myth-face myth-front corners" style="--cc:var(--red)">
-            <span class="myth-tape">[ MITO POPULAR ]</span>
-            <div class="myth-quote">“Se está doendo a canela, basta ignorar e correr mais que passa.”</div>
-            <p style="font-size:.8rem;color:var(--muted)">Origem: cultura do “no pain, no gain” aplicada a tecido que não se regenera sob carga.</p>
-            <div class="myth-id">REGISTRO #M-03 · INTELIGÊNCIA NÃO CONFIRMADA</div>
-            <div class="myth-foot"><button class="btn btn-green myth-reveal">🔓 DESCLASSIFICAR &amp; REVELAR VERDADE</button></div>
-          </div>
-          <div class="myth-face myth-back corners" style="--cc:var(--green)">
-            <span class="myth-tape">[ VERDADE TÁTICA ]</span>
-            <p class="myth-truth">Dor é <b>luz de alerta no painel</b>. Dor na canela que piora com o treino vira <b>fratura por estresse</b>: de 2 semanas de ajuste para <b>3 meses de baixa</b>. Protocolo: reportar, ajustar carga, blindar a panturrilha.</p>
-            <div class="myth-foot"><button class="btn btn-ghost myth-relock">🔒 RECLASSIFICAR</button></div>
-          </div>
-        </div>
-      </div>
+        </div></div>
+
+      </div></div>
+      <button class="car-btn next" aria-label="Próximo">▶</button>
     </div>
+    <div class="car-dots" id="dotsMyths"></div>
   </div>
 </section>
 
 <!-- ========== SLIDE 5 ========== -->
 <section class="slide" data-title="OS 4 PILARES DA BLINDAGEM">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1fa8bd624-9af8-439e-a8b9-225b25d33bd3.png')"></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 05/08 — DOSSIÊ ANATÔMICO</div>
     <h2 class="slide-title fx" style="--d:.15s">OS 4 PILARES DA <span class="hl">BLINDAGEM</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">Abra cada dossiê para consultar mecanismo de lesão, biomecânica e ação corretiva.</p>
-    <div class="pillar-grid">
-
-      <div class="pillar corners fx" style="--d:.3s">
-        <div class="pillar-head"><span class="p-num">01</span>
-          <div class="p-title"><h3>Panturrilhas &amp; Pés</h3><span>ESCUDO ANTI-CANELITE · ABSORÇÃO DE COTURNO</span></div>
+    <p class="slide-sub fx" style="--d:.25s">Selecione um pilar na coluna da esquerda para expandir o dossiê completo: mecanismo de lesão, biomecânica e ação corretiva.</p>
+    <div class="pil-layout fx" style="--d:.35s">
+      <div class="pil-list" id="pilList"></div>
+      <div class="pil-stage corners" id="pilStage">
+        <div class="pil-empty" id="pilEmpty">
+          <svg width="72" height="72" viewBox="0 0 32 32" fill="none" stroke="#5C6B58" stroke-width="1.4"><circle cx="16" cy="16" r="9"/><path d="M16 1v8M16 23v8M1 16h8M23 16h8"/><circle cx="16" cy="16" r="1.6" fill="#5C6B58"/></svg>
+          <p>NENHUM DOSSIÊ ABERTO<br>▸ SELECIONE UM PILAR NA COLUNA TÁTICA</p>
         </div>
-        <div class="dossier"><div><div class="dossier-body">
-          <div class="d-block"><h5>▸ MECANISMO DE LESÃO</h5><p>Panturrilha fraca transfere o impacto do coturno direto para tíbia e fáscia plantar — canelite e fascite por sobrecarga repetida.</p></div>
-          <div class="d-block"><h5>▸ BIOMECÂNICA</h5><p>A panturrilha controla a aterrissagem e devolve a propulsão; os músculos intrínsecos do pé são a primeira linha de suspensão da viatura.</p></div>
-          <div class="d-block"><h5>▸ AÇÃO CORRETIVA</h5><p>Elevação de panturrilha no degrau com excêntrica lenta (3×12); “toalha” com os dedos; progressão gradual de marcha com coturno.</p></div>
-        </div></div></div>
-        <div class="pillar-foot"><button class="btn btn-ghost pillar-toggle">[ + ABRIR DOSSIÊ ANATÔMICO ]</button></div>
+        <div class="pil-detail" id="pilDetail"></div>
       </div>
-
-      <div class="pillar corners fx" style="--d:.4s">
-        <div class="pillar-head"><span class="p-num">02</span>
-          <div class="p-title"><h3>Glúteo Médio &amp; Máximo</h3><span>ESTABILIZADOR DO JOELHO · GERADOR DE POTÊNCIA</span></div>
-        </div>
-        <div class="dossier"><div><div class="dossier-body">
-          <div class="d-block"><h5>▸ MECANISMO DE LESÃO</h5><p>Quadril fraco → queda da pelve no apoio unilateral, joelho valgo e impacto multiplicado na patela e tíbia (tendinite patelar).</p></div>
-          <div class="d-block"><h5>▸ BIOMECÂNICA</h5><p>Correr é uma sequência de apoios unipodais: o glúteo médio segura a pelve nivelada; o máximo estende o quadril e gera a potência da passada.</p></div>
-          <div class="d-block"><h5>▸ AÇÃO CORRETIVA</h5><p>Ponte unilateral 3×10; caminhada lateral com elástico; afundo búlgaro com progressão de carga.</p></div>
-        </div></div></div>
-        <div class="pillar-foot"><button class="btn btn-ghost pillar-toggle">[ + ABRIR DOSSIÊ ANATÔMICO ]</button></div>
-      </div>
-
-      <div class="pillar corners fx" style="--d:.5s">
-        <div class="pillar-head"><span class="p-num">03</span>
-          <div class="p-title"><h3>Posteriores &amp; Quadríceps</h3><span>FREIO DE IMPACTO NAS DESCIDAS</span></div>
-        </div>
-        <div class="dossier"><div><div class="dossier-body">
-          <div class="d-block"><h5>▸ MECANISMO DE LESÃO</h5><p>Descidas e aterrissagens exigem frenagem excêntrica; músculo fraco sofre microlesões — dor anterior no joelho e distensão de posterior.</p></div>
-          <div class="d-block"><h5>▸ BIOMECÂNICA</h5><p>O quadríceps controla a flexão do joelho no contato; os posteriores desaceleram a perna no fim da passada — são os freios ABS da viatura.</p></div>
-          <div class="d-block"><h5>▸ AÇÃO CORRETIVA</h5><p>Descida no degrau com 3s de excêntrica; nórdico adaptado para posterior; agachamento com tempo controlado.</p></div>
-        </div></div></div>
-        <div class="pillar-foot"><button class="btn btn-ghost pillar-toggle">[ + ABRIR DOSSIÊ ANATÔMICO ]</button></div>
-      </div>
-
-      <div class="pillar corners fx" style="--d:.6s">
-        <div class="pillar-head"><span class="p-num">04</span>
-          <div class="p-title"><h3>Core &amp; Lombar</h3><span>SUSTENTAÇÃO DE MOCHILA MILITAR · POSTURA</span></div>
-        </div>
-        <div class="dossier"><div><div class="dossier-body">
-          <div class="d-block"><h5>▸ MECANISMO DE LESÃO</h5><p>Core fraco → tronco flexiona sob a mochila de 15 kg; a lombar assume a carga e transforma a marcha em lombalgia incapacitante.</p></div>
-          <div class="d-block"><h5>▸ BIOMECÂNICA</h5><p>O core transmite a força das pernas ao tronco e mantém a viatura ereta sob carga externa — é o cinto de fixação do equipamento.</p></div>
-          <div class="d-block"><h5>▸ AÇÃO CORRETIVA</h5><p>Prancha frontal 3×40s; prancha lateral; dead bug; caminhada do fazendeiro carregando a própria mochila.</p></div>
-        </div></div></div>
-        <div class="pillar-foot"><button class="btn btn-ghost pillar-toggle">[ + ABRIR DOSSIÊ ANATÔMICO ]</button></div>
-      </div>
-
     </div>
   </div>
 </section>
 
 <!-- ========== SLIDE 6 ========== -->
 <section class="slide" data-title="TESTE DE PRONTIDÃO">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e812ebaf-c59f-4f86-aaee-f917298ce830.png')"></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 06/08 — DINÂMICA AO VIVO NO PÁTIO</div>
     <h2 class="slide-title fx" style="--d:.15s">TESTE DE <span class="hl">PRONTIDÃO OPERACIONAL</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">Formar o pelotão em colunas. Executar os testes com o cronômetro tático abaixo — cada recruta avalia o próprio chassi.</p>
+    <p class="slide-sub fx" style="--d:.25s">Formar o pelotão em colunas. Executar os testes com o cronômetro tático — cada recruta avalia o próprio chassi.</p>
     <div class="ops-grid">
       <div class="fx" style="--d:.3s">
-        <div class="test-brief"><h4>▸ TESTE 1 — EQUILÍBRIO UNIPODAL · 15s</h4>
+        <div class="test-brief">
+          <div class="tb-num">T1</div>
+          <div><h4>TESTE 1 — EQUILÍBRIO UNIPODAL · 15s</h4>
           <p>Mãos na cintura, olhos abertos, um pé elevado. Contar correções de equilíbrio. Repetir com a outra perna.</p></div>
-        <div class="test-brief"><h4>▸ TESTE 2 — RESISTÊNCIA DE PANTURRILHA · 30s</h4>
+        </div>
+        <div class="test-brief">
+          <div class="tb-num">T2</div>
+          <div><h4>TESTE 2 — RESISTÊNCIA DE PANTURRILHA · 30s</h4>
           <p>Elevar o calcanhar no ritmo de 1 repetição por segundo, amplitude total, apoio na parede apenas para equilibrar.</p></div>
-        <div class="crit-row">
-          <span class="badge b-green">SEM BALANÇO / SEM FADIGA = PRONTO</span>
-          <span class="badge b-amber">ATÉ 2 CORREÇÕES = ATENÇÃO</span>
-          <span class="badge b-red">QUEDA / QUEIMAÇÃO PRECOCE = REFORÇO IMEDIATO</span>
         </div>
-        <p style="margin-top:16px;font-size:.8rem;color:var(--dim);font-family:var(--f-tech);letter-spacing:.08em">▸ REGRA DO PÁTIO: quem falha no unilateral, falha no coturno. Dados do teste alimentam o plano do Slide 07.</p>
+        <p style="margin-top:18px;font-size:.82rem;color:var(--dim);font-family:var(--f-tech);letter-spacing:.08em">▸ REGRA DO PÁTIO: quem falha no unilateral, falha no coturno. Os dados do teste alimentam o plano do Slide 07.</p>
       </div>
-      <div class="tcard timer-card corners fx" style="--d:.4s">
-        <div class="presets">
-          <button class="preset armed" data-sec="15">[ TESTE 1: 15s EQUILÍBRIO ]</button>
-          <button class="preset" data-sec="30">[ TESTE 2: 30s PANTURRILHA ]</button>
+      <div class="timer-col fx" style="--d:.4s">
+        <div class="tcard timer-card corners">
+          <div class="presets">
+            <button class="preset armed" data-sec="15">[ TESTE 1: 15s EQUILÍBRIO ]</button>
+            <button class="preset" data-sec="30">[ TESTE 2: 30s PANTURRILHA ]</button>
+          </div>
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="ring-fg" id="timerRing" cx="60" cy="60" r="54" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div id="timerDisplay">00:15.0<small>CRONÔMETRO TÁTICO</small></div>
+          </div>
+          <div class="tbar"><div id="timerBar"></div></div>
+          <div id="timerStatus">ARMADO — AGUARDANDO DISPARO</div>
+          <div class="t-ctrl">
+            <button class="btn btn-green" id="tStart">▶ INICIAR</button>
+            <button class="btn" id="tPause">❚❚ PAUSAR</button>
+            <button class="btn btn-red" id="tReset">↺ RESETAR</button>
+            <button class="btn btn-ghost" id="soundBtn">🔊 ÁUDIO: ON</button>
+          </div>
         </div>
-        <div class="ring-wrap">
-          <svg class="ring" viewBox="0 0 120 120">
-            <circle class="ring-bg" cx="60" cy="60" r="54"/>
-            <circle class="ring-fg" id="timerRing" cx="60" cy="60" r="54" transform="rotate(-90 60 60)"/>
-          </svg>
-          <div id="timerDisplay">00:15.0<small>CRONÔMETRO TÁTICO</small></div>
-        </div>
-        <div class="tbar"><div id="timerBar"></div></div>
-        <div id="timerStatus">ARMADO — AGUARDANDO DISPARO</div>
-        <div class="t-ctrl">
-          <button class="btn btn-green" id="tStart">▶ INICIAR</button>
-          <button class="btn" id="tPause">❚❚ PAUSAR</button>
-          <button class="btn btn-red" id="tReset">↺ RESETAR</button>
-          <button class="btn btn-ghost" id="soundBtn">🔊 ÁUDIO: ON</button>
+        <div class="crit-col">
+          <div class="crit-block cb-green">✔ SEM BALANÇO / SEM FADIGA = PRONTO</div>
+          <div class="crit-block cb-amber">⚠ ATÉ 2 CORREÇÕES = ATENÇÃO</div>
+          <div class="crit-block cb-red">✖ QUEDA / QUEIMAÇÃO PRECOCE = REFORÇO IMEDIATO</div>
         </div>
       </div>
     </div>
@@ -653,6 +732,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 7 ========== -->
 <section class="slide" data-title="PLANO OPERACIONAL NO PÁTIO">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1cdd5e228-aa8d-4490-84fc-af89a312ad2e.png')"></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 07/08 — SEM ACADEMIA, SEM DESCULPA</div>
     <h2 class="slide-title fx" style="--d:.15s">PLANO DE TREINO <span class="hl">OPERACIONAL NO PÁTIO</span></h2>
@@ -660,16 +740,15 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
     <div class="plan-grid">
       <div class="fx" style="--d:.3s">
         <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Afundo Búlgaro</div><div class="ex-dose">3 × 8–10 CADA PERNA · CHASSI + GLÚTEO</div></div></label>
-        <label class="ex-item" style="margin-top:10px"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Elevação em Degrau</div><div class="ex-dose">3 × 10 CADA · FREIO DO QUADRÍCEPS</div></div></label>
-        <label class="ex-item" style="margin-top:10px"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Ponte Unilateral</div><div class="ex-dose">3 × 10 CADA LADO · GLÚTEO + CORE</div></div></label>
-        <label class="ex-item" style="margin-top:10px"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Prancha</div><div class="ex-dose">3 × 30–45s · SUSTENTAÇÃO DE MOCHILA</div></div></label>
+          <div class="ex-info"><div class="ex-name">Afundo Búlgaro</div><div class="ex-dose">3 × 8–10 CADA PERNA · CHASSI + GLÚTEO · DESCIDA EM 2–3s</div></div></label>
+        <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
+          <div class="ex-info"><div class="ex-name">Elevação em Degrau</div><div class="ex-dose">3 × 10 CADA · FREIO DO QUADRÍCEPS · SUBIR EXPLOSIVO</div></div></label>
+        <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
+          <div class="ex-info"><div class="ex-name">Ponte Unilateral</div><div class="ex-dose">3 × 10 CADA LADO · GLÚTEO + CORE · PAUSA DE 2s NO TOPO</div></div></label>
+        <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
+          <div class="ex-info"><div class="ex-name">Prancha</div><div class="ex-dose">3 × 30–45s · SUSTENTAÇÃO DE MOCHILA · QUADRIL NEUTRO</div></div></label>
         <div class="ex-prog"><span id="exCount">0/4</span><div class="bar"><div id="exBar"></div></div></div>
         <div id="exReady">✔ CIRCUITO CONFIRMADO — PELOTÃO PRONTO PARA EXECUÇÃO</div>
-        <p style="margin-top:14px;font-size:.78rem;color:var(--muted)">▸ Cadência: 2–3s na descida de cada repetição. Descanso: 45–60s entre séries. Progressão: +1 repetição por sessão.</p>
       </div>
       <div class="tcard calc corners fx" style="--d:.4s">
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><rect x="5" y="7" width="14" height="14"/><path d="M9 7V4h6v3M9 12h6M9 16h6"/></svg>CALCULADORA TÁTICA DE CARGA <span style="color:var(--dim);font-size:.75rem">(RUCK CALCULATOR)</span></h3>
@@ -691,8 +770,9 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 8 ========== -->
 <section class="slide" data-title="ORDEM DE OPERAÇÕES FINAL">
+  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e49350c5-445f-40cc-bd81-b2f8780b1d2e.png')"></div></div>
   <div class="wrap final">
-    <div class="slide-code fx" style="--d:.05s" style="justify-content:center">SLIDE 08/08 — FECHAMENTO</div>
+    <div class="slide-code fx" style="--d:.05s">SLIDE 08/08 — FECHAMENTO</div>
     <h2 class="slide-title fx" style="--d:.15s">ORDEM DE OPERAÇÕES <span class="hl">FINAL</span></h2>
     <div class="dir-chips fx" style="--d:.3s">
       <div class="dir corners" style="--cc:var(--green)"><small>FREQUÊNCIA</small><b>2–3×</b><small>SESSÕES / SEMANA</small></div>
@@ -710,7 +790,6 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 </main>
 
-<!-- ================= FOOTER ================= -->
 <footer>
   <button class="btn btn-ghost" id="prevBtn">◀ ANTERIOR</button>
   <div class="foot-mid">
@@ -726,8 +805,9 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const slides=$$('.slide'), total=slides.length;
 let current=0; const visited=new Set([0]);
+const relayoutFns=[];
 
-/* ================= ÁUDIO (Web Audio API) ================= */
+/* ================= ÁUDIO ================= */
 let audioCtx=null, soundOn=true;
 function beep(freq=880,dur=.12,type='square',vol=.16){
   if(!soundOn)return;
@@ -747,10 +827,13 @@ const prevBtn=$('#prevBtn'),nextBtn=$('#nextBtn');
 function go(i){
   i=Math.max(0,Math.min(total-1,i));
   if(i===current&&slides[i].classList.contains('active'))return;
+  killZoom();
   slides[current].classList.remove('active');
   current=i;visited.add(i);
   slides[i].classList.add('active');slides[i].scrollTop=0;
-  updateHud();beep(i===total-1?660:520,.05,'square',.06);
+  updateHud();
+  setTimeout(()=>relayoutFns.forEach(f=>f()),650);
+  beep(520,.05,'square',.06);
 }
 function updateHud(){
   $('#progressFill').style.width=(((current+1)/total)*100)+'%';
@@ -770,11 +853,10 @@ nextBtn.onclick=()=>go(current+1);
 $('#startMission').onclick=()=>go(1);
 $('#restartBtn').onclick=()=>go(0);
 
-/* dots */
 const dotRow=$('#dotRow');
 slides.forEach((s,i)=>{const d=document.createElement('button');d.className='dot';d.title='Slide '+(i+1);d.onclick=()=>go(i);dotRow.appendChild(d);});
 
-/* menu suspenso */
+/* menu */
 const menuBtn=$('#menuBtn'),menuPanel=$('#menuPanel'),menuList=$('#menuList');
 slides.forEach((s,i)=>{
   const b=document.createElement('button');b.className='menu-item';
@@ -795,10 +877,10 @@ window.addEventListener('keydown',e=>{
   else if(e.key==='Home'){go(0);}
   else if(e.key==='End'){go(total-1);}
   else if(e.key==='f'||e.key==='F'){toggleFs();}
-  else if(e.key==='Escape'){closeMenu();}
+  else if(e.key==='Escape'){closeMenu();killZoom();}
 });
 
-/* swipe mobile */
+/* swipe */
 let tx=null;
 $('#deck').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
 $('#deck').addEventListener('touchend',e=>{
@@ -816,35 +898,205 @@ document.addEventListener('fullscreenchange',()=>{
   $('#fsBtn').innerHTML=document.fullscreenElement?'⛶ SAIR DA TELA CHEIA':'⛶ TELA CHEIA';
 });
 
-/* relógio zulu */
-function zulu(){const d=new Date(),p=n=>String(n).padStart(2,'0');
-  $('#clock').textContent=p(d.getUTCHours())+':'+p(d.getUTCMinutes())+':'+p(d.getUTCSeconds())+'Z';}
-setInterval(zulu,1000);zulu();
+/* relógio local */
+function clockTick(){
+  const d=new Date(),p=n=>String(n).padStart(2,'0');
+  $('#clock').textContent=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());
+}
+setInterval(clockTick,1000);clockTick();
 
-/* ================= DOSSIÊS (acordeão) ================= */
-$$('.pillar-toggle').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const card=btn.closest('.pillar');
-    const open=card.classList.toggle('open');
-    btn.textContent=open?'[ − FECHAR ]':'[ + ABRIR DOSSIÊ ANATÔMICO ]';
-    beep(open?740:440,.06,'square',.08);
+/* ================= PARALLAX ================= */
+const pxBgs=[];
+slides.forEach(s=>{
+  const bg=s.querySelector('.slide-bg');
+  if(bg)pxBgs.push({s,bg});
+});
+let pmx=0,pmy=0,scmx=0,scmy=0;
+window.addEventListener('mousemove',e=>{pmx=(e.clientX/innerWidth-.5);pmy=(e.clientY/innerHeight-.5);});
+(function pxLoop(){
+  scmx+=(pmx-scmx)*.05;scmy+=(pmy-scmy)*.05;
+  for(const o of pxBgs){
+    if(!o.s.classList.contains('active'))continue;
+    const st=o.s.scrollTop,H=o.s.clientHeight;
+    const ty=Math.min(st*.45,H*1.05)+scmy*-12;
+    const x=scmx*-14;
+    o.bg.style.transform='translate3d('+x.toFixed(1)+'px,'+ty.toFixed(1)+'px,0)';
+  }
+  requestAnimationFrame(pxLoop);
+})();
+
+/* ================= CARROSSEL ================= */
+function makeCarousel(rootSel,cfg){
+  const root=$(rootSel),track=root.querySelector('.car-track');
+  const items=[...track.children];
+  const shell=root.closest('.car-shell');
+  const prev=shell.querySelector('.car-btn.prev'),next=shell.querySelector('.car-btn.next');
+  let idx=0;
+  function layout(anim=true){
+    const gap=cfg.gap||20,w=cfg.width(root.clientWidth),cw=root.clientWidth;
+    if(!anim)track.style.transition='none';
+    items.forEach(it=>{it.style.width=w+'px';});
+    const off=(cw-w)/2 - idx*(w+gap);
+    track.style.transform='translateX('+off+'px)';
+    items.forEach((it,i)=>{
+      const d=Math.abs(i-idx);
+      it.classList.toggle('is-center',d===0);
+      it.classList.toggle('is-side',d===1);
+      it.classList.toggle('is-far',d>1);
+    });
+    if(cfg.dots){
+      cfg.dots.innerHTML=items.map((_,i)=>'<button class="cdot'+(i===idx?' on':'')+'" data-i="'+i+'" aria-label="Card '+(i+1)+'"></button>').join('');
+      cfg.dots.querySelectorAll('.cdot').forEach(c=>c.onclick=()=>goTo(+c.dataset.i));
+    }
+    if(!anim)requestAnimationFrame(()=>{track.style.transition='';});
+  }
+  function goTo(i){idx=((i%items.length)+items.length)%items.length;layout();beep(600,.05,'square',.07);}
+  prev.onclick=()=>goTo(idx-1);
+  next.onclick=()=>goTo(idx+1);
+  items.forEach((it,i)=>it.addEventListener('click',e=>{
+    if(e.target.closest('button'))return;
+    if(i!==idx)goTo(i);
+  }));
+  layout(false);
+  relayoutFns.push(()=>layout(false));
+}
+makeCarousel('#carThreats',{gap:20,dots:$('#dotsThreats'),
+  width:cw=>cw<680?Math.min(340,cw*.78):Math.min(440,cw*.44)});
+makeCarousel('#carMyths',{gap:24,dots:$('#dotsMyths'),
+  width:cw=>cw<680?cw*.9:Math.min(840,cw*.76)});
+window.addEventListener('resize',()=>relayoutFns.forEach(f=>f()));
+
+/* ================= ZOOM SLIDE 3 (CARD AMPLIADO + FONTES PROPORCIONAIS) ================= */
+let zoomClone=null,zoomSrc=null,zoomDone=false;
+const backdrop=$('#zoomBackdrop');
+function openZoom(card){
+  if(zoomClone)return;
+  const r=card.getBoundingClientRect();
+  const c=card.cloneNode(true);
+  c.classList.remove('fx','zoomable','ghost');
+  c.classList.add('zoom-clone');
+  c.style.opacity='1';
+  c.style.animation='none';
+  c.style.top=r.top+'px';c.style.left=r.left+'px';c.style.width=r.width+'px';c.style.height=r.height+'px';
+  c.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+  document.body.appendChild(c);
+  card.classList.add('ghost');
+  zoomClone=c;zoomSrc=card;zoomDone=false;
+  backdrop.classList.add('show');
+  beep(880,.08,'square',.1);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const tw=Math.min(940,innerWidth*.94), th=Math.min(720,innerHeight*.86);
+    c.style.top=Math.max(68,(innerHeight-th)/2)+'px';
+    c.style.left=(innerWidth-tw)/2+'px';
+    c.style.width=tw+'px';c.style.height=th+'px';
+  }));
+  c.addEventListener('click',e=>{
+    if(e.target.closest('.simToggle'))return;
+    closeZoom();
+  });
+}
+function closeZoom(){
+  if(!zoomClone||zoomDone)return;
+  const c=zoomClone,card=zoomSrc;
+  const r=card.getBoundingClientRect();
+  c.style.top=r.top+'px';c.style.left=r.left+'px';c.style.width=r.width+'px';c.style.height=r.height+'px';
+  backdrop.classList.remove('show');
+  beep(440,.07,'square',.08);
+  const finish=()=>{
+    if(zoomDone)return;zoomDone=true;
+    c.remove();card.classList.remove('ghost');zoomClone=null;zoomSrc=null;
+  };
+  setTimeout(finish,620);
+}
+function killZoom(){
+  if(!zoomClone)return;
+  zoomDone=true;
+  zoomClone.remove();
+  if(zoomSrc)zoomSrc.classList.remove('ghost');
+  zoomClone=null;zoomSrc=null;
+  backdrop.classList.remove('show');
+}
+backdrop.addEventListener('click',closeZoom);
+$$('.veh.zoomable').forEach(card=>{
+  card.addEventListener('click',e=>{
+    if(e.target.closest('.simToggle'))return;
+    openZoom(card);
   });
 });
 
-/* ================= MITOS (flip) ================= */
+/* ================= SIMULAÇÃO MOLA (delegado) ================= */
+const SIM_OFF='▸ AGUARDANDO SIMULAÇÃO DO EFEITO MOLA…';
+const SIM_ON='▸ SIMULAÇÃO ATIVA — IMPACTO → ARMAZENA → DEVOLVE (~60% DE ENERGIA ELÁSTICA)';
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.simToggle');
+  if(!b)return;
+  const box=b.closest('.sim-card');
+  const on=box.classList.toggle('sim-on');
+  b.textContent=on?'■ INTERROMPER SIMULAÇÃO':'▶ SIMULAR EFEITO MOLA';
+  box.querySelector('.sim-read').textContent=on?SIM_ON:SIM_OFF;
+  beep(on?880:440,.08,'square',.1);
+});
+
+/* ================= MITOS ================= */
 $$('.myth-reveal').forEach(btn=>btn.addEventListener('click',()=>{btn.closest('.myth-card').classList.add('revealed');beep(980,.09,'square',.1);}));
 $$('.myth-relock').forEach(btn=>btn.addEventListener('click',()=>{btn.closest('.myth-card').classList.remove('revealed');beep(420,.07,'square',.08);}));
 
-/* ================= SIMULAÇÃO DA MOLA ================= */
-const simBox=$('#springSim'),simBtn=$('#simBtn');
-simBtn.onclick=()=>{
-  const on=simBox.classList.toggle('sim-on');
-  simBtn.textContent=on?'■ INTERROMPER SIMULAÇÃO':'▶ SIMULAR EFEITO MOLA';
-  $('#simRead').textContent=on?'▸ SIMULAÇÃO ATIVA — IMPACTO → ARMAZENA → DEVOLVE (~60% DE ENERGIA ELÁSTICA)':'▸ AGUARDANDO SIMULAÇÃO DO EFEITO MOLA…';
-  beep(on?880:440,.08,'square',.1);
-};
+/* ================= PILARES ================= */
+const PILLARS=[
+ {num:'01',title:'Panturrilhas &amp; Pés',tag:'ESCUDO ANTI-CANELITE · ABSORÇÃO DE COTURNO',
+  les:'Panturrilha fraca transfere o impacto do coturno direto para tíbia e fáscia plantar — canelite e fascite por sobrecarga repetida.',
+  bio:'A panturrilha controla a aterrissagem e devolve a propulsão; os músculos intrínsecos do pé são a primeira linha de suspensão da viatura.',
+  act:'Elevação de panturrilha no degrau com excêntrica lenta (3×12); “toalha” com os dedos; progressão gradual de marcha com coturno.'},
+ {num:'02',title:'Glúteo Médio &amp; Máximo',tag:'ESTABILIZADOR DO JOELHO · GERADOR DE POTÊNCIA',
+  les:'Quadril fraco → queda da pelve no apoio unilateral, joelho valgo e impacto multiplicado na patela e tíbia (tendinite patelar).',
+  bio:'Correr é uma sequência de apoios unipodais: o glúteo médio segura a pelve nivelada; o máximo estende o quadril e gera a potência da passada.',
+  act:'Ponte unilateral 3×10; caminhada lateral com elástico; afundo búlgaro com progressão de carga.'},
+ {num:'03',title:'Posteriores &amp; Quadríceps',tag:'FREIO DE IMPACTO NAS DESCIDAS',
+  les:'Descidas e aterrissagens exigem frenagem excêntrica; músculo fraco sofre microlesões — dor anterior no joelho e distensão de posterior.',
+  bio:'O quadríceps controla a flexão do joelho no contato; os posteriores desaceleram a perna no fim da passada — são os freios ABS da viatura.',
+  act:'Descida no degrau com 3s de excêntrica; nórdico adaptado para posterior; agachamento com tempo controlado.'},
+ {num:'04',title:'Core &amp; Lombar',tag:'SUSTENTAÇÃO DE MOCHILA MILITAR · POSTURA',
+  les:'Core fraco → tronco flexiona sob a mochila de 15 kg; a lombar assume a carga e transforma a marcha em lombalgia incapacitante.',
+  bio:'O core transmite a força das pernas ao tronco e mantém a viatura ereta sob carga externa — é o cinto de fixação do equipamento.',
+  act:'Prancha frontal 3×40s; prancha lateral; dead bug; caminhada do fazendeiro carregando a própria mochila.'}
+];
+const pilList=$('#pilList'),pilDetail=$('#pilDetail'),pilEmpty=$('#pilEmpty');
+let pilActive=-1;
+PILLARS.forEach((p,i)=>{
+  const b=document.createElement('button');
+  b.className='pil-item corners';
+  b.innerHTML='<span class="p-num">'+p.num+'</span><div class="p-title"><h3>'+p.title+'</h3><span>'+p.tag+'</span></div><span class="pil-ico">+</span>';
+  b.onclick=()=>togglePillar(i);
+  pilList.appendChild(b);
+});
+function togglePillar(i){
+  const items=pilList.querySelectorAll('.pil-item');
+  if(pilActive===i){
+    pilActive=-1;
+    items.forEach(it=>{it.classList.remove('active');it.querySelector('.pil-ico').textContent='+';});
+    pilDetail.classList.remove('in');pilDetail.innerHTML='';pilEmpty.style.display='flex';
+    beep(420,.06,'square',.08);
+    return;
+  }
+  pilActive=i;
+  items.forEach((it,j)=>{
+    it.classList.toggle('active',j===i);
+    it.querySelector('.pil-ico').textContent=j===i?'−':'+';
+  });
+  const p=PILLARS[i];
+  pilEmpty.style.display='none';
+  pilDetail.classList.remove('in');
+  pilDetail.innerHTML=
+    '<div class="pd-head"><span class="p-num">'+p.num+'</span><div><h3>'+p.title+'</h3><span>'+p.tag+'</span></div></div>'+
+    '<div class="d-block"><h5>▸ MECANISMO DE LESÃO</h5><p>'+p.les+'</p></div>'+
+    '<div class="d-block"><h5>▸ BIOMECÂNICA</h5><p>'+p.bio+'</p></div>'+
+    '<div class="d-block"><h5>▸ AÇÃO CORRETIVA</h5><p><b>'+p.act+'</b></p></div>';
+  void pilDetail.offsetWidth;
+  pilDetail.classList.add('in');
+  beep(760,.07,'square',.1);
+}
 
-/* ================= CRONÔMETRO TÁTICO ================= */
+/* ================= CRONÔMETRO ================= */
 let tDur=15,tRem=15,tRun=false,tRaf=null,tLast=0,tPrevCeil=99;
 const CIRC=2*Math.PI*54;
 const tDisp=$('#timerDisplay'),tRing=$('#timerRing'),tStatus=$('#timerStatus'),tBar=$('#timerBar');
@@ -879,7 +1131,7 @@ function loop(ts){
   const c=Math.ceil(tRem);
   if(c!==tPrevCeil){if(c<=3&&c>0)beep(760,.1,'square',.16);tPrevCeil=c;}
   renderTimer();
-  if(tRem<=0){tRun=false;tStatus.textContent=' TEMPO ESGOTADO — TESTE CONCLUÍDO';endSound();return;}
+  if(tRem<=0){tRun=false;tStatus.textContent='TEMPO ESGOTADO — TESTE CONCLUÍDO';endSound();return;}
   tRaf=requestAnimationFrame(loop);
 }
 function tPause(){if(!tRun)return;tStop();tStatus.textContent='PAUSADO — AGUARDANDO RETOMADA';beep(520,.07,'square',.1);}
@@ -888,7 +1140,7 @@ $$('.preset').forEach(b=>b.onclick=()=>setPreset(+b.dataset.sec,b));
 $('#tStart').onclick=tStart;$('#tPause').onclick=tPause;$('#tReset').onclick=tReset;
 $('#soundBtn').onclick=function(){soundOn=!soundOn;this.textContent=soundOn?'🔊 ÁUDIO: ON':'🔇 ÁUDIO: OFF';if(soundOn)beep(880,.06);};
 
-/* ================= CALCULADORA RUCK ================= */
+/* ================= CALCULADORA ================= */
 const ruck=$('#ruckSlider');
 function ruckUpdate(){
   const w=+ruck.value,min=w*.1,max=w*.15;
