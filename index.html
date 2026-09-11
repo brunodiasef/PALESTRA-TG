@@ -17,7 +17,7 @@
   --bg:#0D110E; --bg2:#172017; --panel:#121A13; --card:#151E15;
   --border:#2A3A27; --border2:#3A4F35;
   --amber:#F59E0B; --green:#22C55E; --red:#EF4444; --orange:#F97316; --yellow:#FACC15;
-  --text:#D8E0D6; --muted:#8FA08C; --dim:#5C6B58;
+  --text:#DDE5DB; --muted:#9AAC97; --dim:#7C8D78;
   --f-disp:'Rajdhani','Chakra Petch',sans-serif;
   --f-tech:'Chakra Petch',monospace;
   --f-body:'Inter',system-ui,sans-serif;
@@ -25,24 +25,31 @@
   --mira:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23F59E0B' stroke-width='2'%3E%3Ccircle cx='16' cy='16' r='9'/%3E%3Cpath d='M16 1v8M16 23v8M1 16h8M23 16h8'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='1.6' fill='%23F59E0B'/%3E%3C/svg%3E") 16 16, crosshair;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.55}
+html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
+body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 button{font-family:inherit;cursor:var(--mira);color:inherit;background:none;border:none}
 ::selection{background:var(--amber);color:#0D110E}
+:where(button,input,a,[tabindex]):focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 button,.dot,.cdot,input[type=range],.ex-item,.veh,.zoom-clone,.pil-item,.menu-item,.car-item.is-side{cursor:var(--mira)}
 input[type=range]::-webkit-slider-thumb{cursor:var(--mira)}
 input[type=range]::-moz-range-thumb{cursor:var(--mira)}
 
 /* ============ SCANLINE / CRT ============ */
-.scanlines{position:fixed;inset:0;z-index:700;pointer-events:none;opacity:.16;
+.scanlines{position:fixed;inset:0;z-index:700;pointer-events:none;opacity:.09;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 3px);}
 .scanbar{position:fixed;left:0;right:0;height:90px;z-index:701;pointer-events:none;opacity:.05;
   background:linear-gradient(180deg,transparent,var(--green),transparent);animation:sweep 9s linear infinite;}
 @keyframes sweep{from{top:-15%}to{top:110%}}
+.vignette{position:fixed;inset:0;z-index:690;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 42%,rgba(3,6,3,.6) 100%)}
+.gridfx{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background:linear-gradient(rgba(58,79,53,.09) 1px,transparent 1px) 0 0/72px 72px,
+             linear-gradient(90deg,rgba(58,79,53,.09) 1px,transparent 1px) 0 0/72px 72px}
 
 /* ============ PROGRESSO TOPO ============ */
 #progressTrack{position:fixed;top:0;left:0;right:0;height:3px;z-index:300;background:#101710}
-#progressFill{height:100%;width:12.5%;background:linear-gradient(90deg,var(--green),var(--amber));
+#progressFill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--amber));
   box-shadow:0 0 10px rgba(245,158,11,.6);transition:width .5s cubic-bezier(.6,0,.2,1)}
 
 /* ============ HEADER ============ */
@@ -92,8 +99,9 @@ header{position:fixed;top:3px;left:0;right:0;height:var(--topH);z-index:150;
 .hud-menu{position:relative}
 #menuPanel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,92vw);
   background:rgba(13,17,14,.98);border:1px solid var(--border2);z-index:400;max-height:70vh;overflow-y:auto;
-  transform-origin:top;transform:scaleY(0);opacity:0;transition:transform .28s cubic-bezier(.6,0,.2,1),opacity .2s}
-#menuPanel.open{transform:scaleY(1);opacity:1}
+  transform-origin:top;transform:scaleY(0);opacity:0;visibility:hidden;pointer-events:none;
+  transition:transform .28s cubic-bezier(.6,0,.2,1),opacity .2s,visibility 0s .3s}
+#menuPanel.open{transform:scaleY(1);opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
 .mp-head{font-family:var(--f-tech);font-size:11px;letter-spacing:.2em;color:var(--amber);
   padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(245,158,11,.05)}
 .menu-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
@@ -118,6 +126,7 @@ header{position:fixed;top:3px;left:0;right:0;height:var(--topH);z-index:150;
 .slide::-webkit-scrollbar-thumb{background:var(--border2)}
 .slide.active{opacity:1;visibility:visible;transform:translateX(0);transition-delay:0s}
 .slide .wrap{max-width:1180px;margin:0 auto;position:relative;z-index:2}
+.bg-clip{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;contain:paint}
 .slide-bg{position:absolute;left:-3%;right:-3%;top:-40%;height:200%;z-index:0;pointer-events:none;will-change:transform}
 .slide-bg-img{position:absolute;inset:0;background-size:cover;background-position:center}
 .slide-bg-img::after{content:"";position:absolute;inset:0;
@@ -161,8 +170,8 @@ h1.slide-title,h2.slide-title{font-family:var(--f-disp);font-weight:700;text-tra
 .carousel{overflow:hidden;width:100%}
 .car-track{display:flex;gap:20px;align-items:center;will-change:transform;transition:transform .65s cubic-bezier(.6,0,.2,1)}
 .car-item{flex:none;transition:filter .55s,opacity .55s,transform .55s}
-.car-item.is-side{filter:blur(2.5px);opacity:.55;transform:scale(.95)}
-.car-item.is-far{filter:blur(5px);opacity:0;transform:scale(.9)}
+.car-item.is-side{filter:blur(1.5px);opacity:.55;transform:scale(.95)}
+.car-item.is-far{filter:blur(3px);opacity:0;transform:scale(.9)}
 .car-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:46px;height:46px;font-size:18px;
   border:1px solid var(--amber);color:var(--amber);background:rgba(13,17,14,.9);
   display:flex;align-items:center;justify-content:center;transition:all .2s}
@@ -278,7 +287,22 @@ h1.slide-title,h2.slide-title{font-family:var(--f-disp);font-weight:700;text-tra
 .myth-id{font-family:var(--f-tech);font-size:11.5px;color:var(--dim);letter-spacing:.14em;margin-top:14px}
 
 /* ============ SLIDE 5 — PILARES ============ */
-.pil-layout{display:grid;grid-template-columns:minmax(300px,370px) 1fr;gap:16px;margin-top:24px;align-items:start}
+.pil-layout{display:grid;grid-template-columns:168px minmax(270px,340px) 1fr;gap:16px;margin-top:24px;align-items:start}
+.pil-fig-col{border:1px solid var(--border);background:linear-gradient(180deg,var(--card),var(--panel));
+  padding:14px 10px;text-align:center;--cc:var(--border2)}
+.fig-cap{font-family:var(--f-tech);font-size:9.5px;letter-spacing:.18em;color:var(--dim);margin-bottom:8px}
+.bodyfig{width:100%;height:auto;max-height:44vh}
+.bodyfig .outline{fill:none;stroke:var(--border2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bodyfig .zone{cursor:var(--mira)}
+.bodyfig .zone rect{fill:rgba(58,79,53,.22);stroke:var(--border2);stroke-width:1.5;
+  transition:fill .35s,stroke .35s,stroke-width .35s}
+.bodyfig .zone:hover rect{fill:rgba(34,197,94,.16);stroke:var(--green)}
+.bodyfig .zone.on rect{fill:rgba(245,158,11,.3);stroke:var(--amber);stroke-width:2.2}
+.bodyfig .zone.on{animation:zonePulse 1.8s ease-in-out infinite}
+@keyframes zonePulse{0%,100%{opacity:1}50%{opacity:.62}}
+.fig-legend{margin-top:10px;font-family:var(--f-tech);font-size:9.5px;letter-spacing:.12em;
+  color:var(--dim);line-height:1.7;min-height:32px}
+.fig-legend.on{color:var(--amber)}
 .pil-list{display:flex;flex-direction:column;gap:12px}
 .pil-item{display:flex;gap:14px;align-items:center;text-align:left;padding:18px 16px;
   border:1px solid var(--border);background:linear-gradient(180deg,var(--card),var(--panel));transition:all .25s;--cc:var(--border2)}
@@ -339,13 +363,23 @@ h1.slide-title,h2.slide-title{font-family:var(--f-disp);font-weight:700;text-tra
 .cb-green{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.08)}
 .cb-amber{border-color:var(--amber);color:var(--amber);background:rgba(245,158,11,.08)}
 .cb-red{border-color:var(--red);color:#FCA5A5;background:rgba(239,68,68,.1)}
+.crit-block{transition:all .2s;text-align:left;width:100%}
+.crit-block[data-v]:hover{transform:translateX(4px)}
+.crit-block.picked{box-shadow:0 0 20px -4px currentColor;transform:translateX(6px)}
+.crit-block[data-v]:not(.picked){opacity:.6}
+.crit-cap{font-family:var(--f-tech);font-size:10px;letter-spacing:.16em;color:var(--dim);margin-bottom:2px}
+#verdictOut{display:none;font-size:.9rem;line-height:1.6;padding:14px 16px;border-left:4px solid var(--amber);
+  background:rgba(245,158,11,.08);color:var(--text)}
+#verdictOut.show{display:block;animation:fxUp .4s both}
+#verdictOut b{color:var(--amber)}
 
 /* ============ SLIDE 7 ============ */
 .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
 .ex-item{display:flex;align-items:center;gap:18px;padding:22px 20px;border:1px solid var(--border);
   background:rgba(21,30,21,.92);transition:all .2s;user-select:none}
 .ex-item:hover{border-color:var(--border2);transform:translateX(4px)}
-.ex-item input{display:none}
+.ex-item input{position:absolute;width:1px;height:1px;opacity:0;margin:0}
+.ex-item:focus-within{border-color:var(--amber);box-shadow:0 0 0 2px rgba(245,158,11,.35)}
 .ex-box{width:28px;height:28px;border:2px solid var(--border2);flex:none;position:relative;transition:all .2s}
 .ex-item input:checked ~ .ex-box{border-color:var(--green);background:rgba(34,197,94,.15)}
 .ex-item input:checked ~ .ex-box::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:700;font-size:17px}
@@ -376,6 +410,76 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:0;backg
 .co.amber b{color:var(--amber)}
 .calc-note{margin-top:14px;font-size:.78rem;color:var(--muted);border-left:2px solid var(--amber);padding-left:10px}
 
+/* ============ AQUECIMENTO ============ */
+.warm-grid{display:grid;grid-template-columns:1fr minmax(300px,380px);gap:18px;margin-top:22px;align-items:start}
+.warm-list{display:flex;flex-direction:column;gap:8px}
+.warm-item{display:flex;gap:14px;align-items:center;padding:13px 16px;border:1px solid var(--border);
+  background:linear-gradient(180deg,var(--card),var(--panel));transition:all .3s;--cc:var(--border2)}
+.warm-item.done{opacity:.45;border-color:var(--border)}
+.warm-item.done .wi-num{color:var(--green)}
+.warm-item.now{border-color:var(--amber);background:rgba(245,158,11,.09);
+  box-shadow:0 0 22px -4px rgba(245,158,11,.5);transform:translateX(6px);--cc:var(--amber)}
+.wi-num{font-family:var(--f-tech);font-weight:700;font-size:1.15rem;color:var(--dim);flex:none;width:26px}
+.warm-item.now .wi-num{color:var(--amber)}
+.wi-body{flex:1;min-width:0}
+.wi-body h4{font-family:var(--f-disp);font-weight:700;font-size:1.02rem;letter-spacing:.05em;
+  text-transform:uppercase;color:#EDF3EB}
+.wi-body p{font-size:.84rem;color:var(--muted);margin-top:3px}
+.wi-sec{font-family:var(--f-tech);font-weight:700;font-size:1rem;color:var(--green);flex:none}
+.warm-panel{--cc:var(--green);display:flex;flex-direction:column;align-items:center;padding:24px 20px;position:sticky;top:8px}
+.warm-stage{font-family:var(--f-tech);font-size:10px;letter-spacing:.18em;color:var(--dim);text-align:center;min-height:15px}
+#warmNow{font-family:var(--f-disp);font-weight:700;font-size:1.3rem;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--amber);text-align:center;margin-top:6px;line-height:1.2;min-height:32px}
+#warmClock{font-family:var(--f-tech);font-weight:700;font-size:3.4rem;color:var(--green);
+  letter-spacing:.03em;text-shadow:0 0 18px rgba(34,197,94,.4);margin:6px 0 2px}
+#warmClock.low{color:var(--red);text-shadow:0 0 18px rgba(239,68,68,.5)}
+#warmNext{font-family:var(--f-tech);font-size:10px;letter-spacing:.14em;color:var(--dim);min-height:14px;text-align:center}
+.warm-bar{width:100%;height:6px;background:#1A241A;margin:16px 0 4px;overflow:hidden}
+#warmFill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--amber));transition:width .2s linear}
+.warm-total{width:100%;display:flex;justify-content:space-between;font-family:var(--f-tech);
+  font-size:9.5px;letter-spacing:.14em;color:var(--dim)}
+.warm-ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.cold-rule{margin-top:22px;border:1px solid var(--amber);background:rgba(245,158,11,.08);
+  padding:16px 20px;display:flex;gap:14px;align-items:flex-start}
+.cold-rule b{color:var(--amber)}
+.cold-rule .x{font-size:1.3rem;flex:none;color:var(--amber)}
+
+/* ============ PROGRESSÃO ============ */
+.ph-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.ph-tab{flex:1;min-width:150px;text-align:left;padding:14px 16px;border:1px solid var(--border);
+  background:linear-gradient(180deg,var(--card),var(--panel));transition:all .25s;--cc:var(--border2)}
+.ph-tab:hover{border-color:var(--border2);transform:translateY(-2px)}
+.ph-tab.on{border-color:var(--amber);background:rgba(245,158,11,.08);
+  box-shadow:0 0 22px -6px rgba(245,158,11,.5);--cc:var(--amber);transform:translateY(-3px)}
+.ph-tab small{font-family:var(--f-tech);font-size:9.5px;letter-spacing:.16em;color:var(--dim);display:block}
+.ph-tab.on small{color:var(--amber)}
+.ph-tab b{font-family:var(--f-disp);font-weight:700;font-size:1.05rem;letter-spacing:.04em;
+  text-transform:uppercase;color:#EDF3EB;display:block;margin-top:3px}
+.ph-grid{display:grid;grid-template-columns:1fr minmax(280px,360px);gap:18px;margin-top:18px;align-items:start}
+.ph-detail{--cc:var(--green);min-height:250px;padding:24px 26px}
+.ph-detail .pd-head h3{font-size:1.35rem}
+.ph-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+.ph-row{border:1px solid var(--border);background:#0C120C;padding:12px 14px}
+.ph-row small{font-family:var(--f-tech);font-size:9px;letter-spacing:.16em;color:var(--dim);display:block}
+.ph-row b{font-family:var(--f-tech);font-size:1.02rem;color:var(--green);letter-spacing:.02em}
+.ph-gate{margin-top:18px;border-left:4px solid var(--amber);background:rgba(245,158,11,.07);padding:12px 16px;font-size:.9rem}
+.ph-gate b{color:var(--amber);font-family:var(--f-tech);font-size:.78rem;letter-spacing:.14em;display:block;margin-bottom:4px}
+.ph-chart{--cc:var(--amber);padding:20px}
+.chart-svg{width:100%;height:auto;margin-top:8px}
+.chart-svg .bar{fill:#22412A;stroke:var(--border2);stroke-width:1;transition:all .4s}
+.chart-svg g.on .bar{fill:rgba(245,158,11,.55);stroke:var(--amber)}
+.chart-svg .blab{font-family:'Chakra Petch',monospace;font-size:11px;fill:var(--dim)}
+.chart-svg g.on .blab{fill:var(--amber)}
+.chart-svg .bval{font-family:'Chakra Petch',monospace;font-size:12px;font-weight:700;fill:var(--muted)}
+.chart-svg g.on .bval{fill:var(--amber)}
+.chart-svg .axis{stroke:var(--border2);stroke-width:1}
+.golden{margin-top:16px;font-size:.84rem;color:var(--muted);border-left:2px solid var(--red);padding-left:12px}
+.golden b{color:var(--red)}
+@media(max-width:900px){
+  .warm-grid,.ph-grid{grid-template-columns:1fr}
+  .warm-panel{position:static}
+}
+
 /* ============ SLIDE 8 ============ */
 .final{min-height:100%;display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center}
 .dir-chips{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:30px 0}
@@ -383,6 +487,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:0;backg
 .dir small{font-family:var(--f-tech);font-size:9.5px;letter-spacing:.2em;color:var(--muted);display:block}
 .dir b{font-family:var(--f-disp);font-size:1.6rem;color:var(--green);letter-spacing:.03em}
 .final-quote{font-family:var(--f-disp);font-weight:600;font-size:clamp(1.05rem,2.4vw,1.5rem);color:#E9F0E7;max-width:720px}
+.safety{max-width:760px;margin-top:22px;font-size:.86rem;line-height:1.6;color:#F0DCDC;
+  border:1px solid var(--red);background:rgba(239,68,68,.08);padding:14px 18px;text-align:left}
+.safety b{color:var(--red)}
+.refs{max-width:820px;margin-top:14px;font-size:.72rem;line-height:1.7;color:var(--dim);
+  font-family:var(--f-tech);letter-spacing:.04em}
 .selva{font-family:var(--f-disp);font-weight:700;font-size:clamp(3rem,9vw,6rem);letter-spacing:.1em;
   color:var(--amber);text-shadow:0 0 30px rgba(245,158,11,.45);margin-top:26px}
 
@@ -398,19 +507,100 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 #counter{font-family:var(--f-tech);font-size:11px;letter-spacing:.2em;color:var(--muted);white-space:nowrap}
 .kbd-hint{font-family:var(--f-tech);font-size:9.5px;color:var(--dim);letter-spacing:.1em}
 
+/* ============ ENTRADA 3D DO TÍTULO + DISPAROS ============ */
+.hero-title .ln{display:inline-block}
+.hero-title .ch{display:inline-block;opacity:0;will-change:transform,filter;backface-visibility:hidden}
+.hero-title .sp{display:inline-block;width:.3em}
+.slide.active .hero-title .ch{animation:chIn .82s cubic-bezier(.16,.86,.26,1) both;
+  animation-delay:calc(.28s + var(--i,0) * .032s)}
+@keyframes chIn{
+  0%{opacity:0;filter:blur(18px);
+     transform:perspective(1100px) translate3d(0,0,-880px) rotateX(42deg) scale(.8)}
+  50%{opacity:1}
+  72%{filter:blur(0);transform:perspective(1100px) translate3d(0,0,95px) rotateX(-6deg) scale(1.05)}
+  100%{opacity:1;filter:blur(0);transform:none}
+}
+/* letra atingida */
+.slide.active .hero-title .ch.struck{animation:chStruck .42s cubic-bezier(.3,.9,.3,1) both;
+  color:#4a3a24;text-shadow:0 0 14px rgba(245,158,11,.35)}
+.hero-title .ln.hl .ch.struck{color:#5a4426}
+@keyframes chStruck{
+  0%{transform:translate3d(0,0,0)}
+  12%{transform:translate3d(5px,-4px,0) scale(1.07) rotate(1.5deg)}
+  28%{transform:translate3d(-3px,2px,0) scale(.98) rotate(-1deg)}
+  100%{transform:none}
+}
+/* camada dos disparos */
+#shotFx{position:fixed;inset:0;z-index:695;pointer-events:none;overflow:hidden}
+#shotFx svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+#shotFlash{position:fixed;inset:0;z-index:694;pointer-events:none;background:#FFF3D6;opacity:0}
+#shotFlash.on{animation:shotFlash .13s ease-out}
+@keyframes shotFlash{0%{opacity:.38}100%{opacity:0}}
+body.shake #deck,body.shake header,body.shake footer{animation:shockwave .4s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shockwave{
+  10%{transform:translate(-8px,4px)}22%{transform:translate(7px,-5px)}
+  36%{transform:translate(-6px,-2px)}50%{transform:translate(5px,4px)}
+  66%{transform:translate(-4px,1px)}82%{transform:translate(2px,-2px)}100%{transform:none}
+}
+@media (prefers-reduced-motion: reduce){
+  #shotFlash,body.shake #deck,body.shake header,body.shake footer{animation:none!important}
+}
+
+/* ============ MOVIMENTO REDUZIDO / IMPRESSAO ============ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.14s!important;scroll-behavior:auto!important}
+  .scanbar,.scanlines{display:none}
+}
+#scrollHint{position:fixed;right:18px;bottom:calc(var(--botH) + 14px);
+  z-index:160;font-family:var(--f-tech);font-size:10px;letter-spacing:.2em;color:var(--amber);
+  border:1px solid var(--amber);background:rgba(13,17,14,.92);padding:7px 14px;
+  opacity:0;pointer-events:none;transition:opacity .35s}
+#scrollHint.show{opacity:.95;animation:hintBob 1.7s ease-in-out infinite}
+@keyframes hintBob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@media print{
+  html,body{height:auto;overflow:visible}
+  header,footer,#progressTrack,.scanlines,.scanbar,.vignette,.gridfx,#scrollHint,.car-btn,.car-dots{display:none!important}
+  #deck{position:static;inset:auto}
+  .slide{position:static;opacity:1!important;visibility:visible!important;transform:none!important;
+    page-break-after:always;break-after:page;min-height:auto}
+  .slide-bg,.myth-front{display:none}
+  .myth-card{height:auto;perspective:none}
+  .myth-inner,.myth-card.revealed .myth-inner{transform:none}
+  .myth-face{position:static;backface-visibility:visible}
+  .car-track{display:block}
+  .car-item{width:auto!important;filter:none!important;opacity:1!important;transform:none!important;margin-bottom:14px}
+  body{background:#fff;color:#111}
+}
+
 /* ============ RESPONSIVO ============ */
 @media(max-width:900px){
-  .ops-grid,.plan-grid,.pil-layout{grid-template-columns:1fr}
+  .ops-grid,.plan-grid{grid-template-columns:1fr}
+  .pil-layout{grid-template-columns:128px 1fr}
+  .pil-stage{grid-column:1/-1}
   .hud-mid{display:none}
   .kbd-hint{display:none}
   .pil-stage{min-height:320px}
   .pil-empty{min-height:260px}
+}
+@media(max-width:1150px){
+  .pil-layout{grid-template-columns:150px 1fr}
+  .pil-stage{grid-column:1/-1}
 }
 @media(max-width:680px){
   .car-item.is-center .car-threat{min-height:430px}
 }
 @media(max-width:600px){
   .slide{padding:22px 12px 40px}
+  #fsBtn{display:none}
+  .mb-lbl{display:none}
+  .pil-layout{grid-template-columns:1fr}
+  .pil-fig-col{display:flex;align-items:center;gap:16px;text-align:left;padding:12px 14px}
+  .bodyfig{width:auto;height:150px;max-height:150px;flex:none}
+  .fig-cap{display:none}
+  .fig-legend{margin-top:0;font-size:11px;letter-spacing:.14em}
+  .ph-tab{min-width:100%}
+  #warmClock{font-size:2.8rem}
   .hud-brand span{display:none}
   .clockbox{display:none}
   .btn{padding:9px 12px;font-size:11px}
@@ -424,8 +614,13 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 </head>
 <body>
 
+<div class="gridfx"></div>
 <div class="scanlines"></div>
 <div class="scanbar"></div>
+<div class="vignette"></div>
+<div id="scrollHint">▼ ROLAR PARA VER O RESTO</div>
+<div id="shotFlash" aria-hidden="true"></div>
+<div id="shotFx" aria-hidden="true"></div>
 <div id="progressTrack"><div id="progressFill"></div></div>
 <div id="zoomBackdrop"></div>
 
@@ -439,10 +634,13 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
     <span class="clockbox"><span id="clock">--:--:--</span><i>HORA LOCAL</i></span>
     <button class="btn btn-ghost" id="fsBtn" title="Tela cheia (F)">⛶ TELA CHEIA</button>
     <div class="hud-menu">
-      <button class="btn" id="menuBtn" aria-haspopup="true" aria-expanded="false">☰ ÍNDICE DE OPERAÇÕES ▾</button>
+      <button class="btn" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Índice de operações">☰ <span class="mb-lbl">ÍNDICE DE OPERAÇÕES</span> ▾</button>
       <div id="menuPanel" class="corners">
         <div class="mp-head">▸ ÍNDICE DE OPERAÇÕES — SELECIONE O CANAL</div>
         <div id="menuList"></div>
+        <button class="menu-item" id="clearState">
+          <span class="mi-num">↺</span><span class="mi-title">LIMPAR REGISTRO DA SESSÃO</span>
+          <span class="mi-status st-pending" id="saveTag">—</span></button>
       </div>
     </div>
   </div>
@@ -452,18 +650,21 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 1 ========== -->
 <section class="slide" id="slide1" data-title="BRIEFING INICIAL">
-  <div class="slide-bg"><div class="slide-bg-img kb" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/187620094-3806-4060-9439-90c81110ef8e.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img kb" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/187620094-3806-4060-9439-90c81110ef8e.png')"></div></div></div>
   <div class="wrap hero">
     <div class="hero-tags fx" style="--d:.05s">
       <span class="badge b-amber">TFM</span><span class="badge b-green">PREVENÇÃO DE BAIXAS</span><span class="badge b-dim">TIRO DE GUERRA</span>
       <span class="badge b-dim">CLASSIFICAÇÃO: OSTENSIVO</span>
     </div>
     <div class="slide-code fx" style="--d:.15s">SLIDE 01/08 — BRIEFING INICIAL</div>
-    <h1 class="slide-title fx" style="--d:.25s">OPERAÇÃO<br><span class="hl">CHASSI BLINDADO</span></h1>
+    <h1 class="slide-title hero-title" id="heroTitle">
+      <span class="ln"><span class="ch" style="--i:0">O</span><span class="ch" style="--i:1">P</span><span class="ch" style="--i:2">E</span><span class="ch" style="--i:3">R</span><span class="ch" style="--i:4">A</span><span class="ch" style="--i:5">Ç</span><span class="ch" style="--i:6">Ã</span><span class="ch hit" id="hitA" style="--i:7">O</span></span><br>
+      <span class="ln hl"><span class="ch" style="--i:8">C</span><span class="ch" style="--i:9">H</span><span class="ch" style="--i:10">A</span><span class="ch" style="--i:11">S</span><span class="ch" style="--i:12">S</span><span class="ch" style="--i:13">I</span><span class="sp"></span><span class="ch" style="--i:14">B</span><span class="ch" style="--i:15">L</span><span class="ch" style="--i:16">I</span><span class="ch" style="--i:17">N</span><span class="ch" style="--i:18">D</span><span class="ch" style="--i:19">A</span><span class="ch" style="--i:20">D</span><span class="ch hit" id="hitB" style="--i:21">O</span></span>
+    </h1>
     <p class="slide-sub fx" style="--d:.35s">Treinamento de Força para Corrida: Blindagem Muscular para o TAF e Marchas. Instrução de preparação física militar para recrutas.</p>
     <div class="hero-quote fx" style="--d:.45s">“Soldado forte não pede baixa por lesão.”</div>
     <div class="hero-meta fx" style="--d:.55s">
-      <div class="hm">DURAÇÃO DA SESSÃO<b>20 MIN</b></div>
+      <div class="hm">DURAÇÃO DA INSTRUÇÃO<b>50 MIN</b></div>
       <div class="hm">EFETIVO<b>PELOTÃO TG</b></div>
       <div class="hm">RECURSO NECESSÁRIO<b>PÁTIO + CORPO</b></div>
       <div class="hm">OBJETIVO<b>TAF 100% APTO</b></div>
@@ -476,7 +677,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 2 ========== -->
 <section class="slide" data-title="DIAGNÓSTICO DE CAMPO">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/147f83714-ccaf-4164-93ac-fa63dd3659cd.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/147f83714-ccaf-4164-93ac-fa63dd3659cd.png')"></div></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 02/08 — O PROBLEMA</div>
     <h2 class="slide-title fx" style="--d:.15s">O DIAGNÓSTICO DO <span class="hl">CAMPO DE BATALHA</span></h2>
@@ -489,7 +690,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
         <div class="car-item"><div class="tcard threat car-threat corners" style="--tc:#EF4444">
           <div class="tname">⚠ SÍNDROME DO ESTRESSE TIBIAL</div>
           <div class="talias">“CANELITE” — DOR NA BORDA INTERNA DA TÍBIA</div>
-          <p>Impacto repetido sem musculatura para dissipar a carga. A nº 1 em baixas de TFM.</p>
+          <p>Impacto repetido sem musculatura para dissipar a carga. Entre as principais causas de afastamento no treinamento físico militar.</p>
           <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
           <span class="badge b-red">AMEAÇA: CRÍTICA</span>
         </div></div>
@@ -535,7 +736,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 3 ========== -->
 <section class="slide" data-title="MECÂNICA DA VIATURA">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1b691dea9-4b42-478f-abad-07b01d6986b0.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1b691dea9-4b42-478f-abad-07b01d6986b0.png')"></div></div></div>
   <div class="wrap" id="vehWrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 03/08 — ANALOGIA DO COMBATE</div>
     <h2 class="slide-title fx" style="--d:.15s">A MECÂNICA DA <span class="hl">VIATURA</span></h2>
@@ -551,7 +752,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
       <div class="tcard veh corners fx zoomable" style="--d:.45s;--cc:var(--green)">
         <span class="vtag">SISTEMA 02</span>
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M4 17l6-10 4 6 6-9"/><path d="M4 21h16"/></svg>O CHASSI &amp; SUSPENSÃO <span style="color:var(--dim);font-size:.8rem">(MÚSCULOS / TENDÕES)</span></h3>
-        <p><b>Ganho na força.</b> A cada passada, pernas absorvem <b>3 a 5× o peso corporal</b>. Só músculo e tendão fortes seguram esse impacto — corrida não constrói essa blindagem.</p>
+        <p><b>Ganho na força.</b> A cada passada o solo devolve <b>~2,5 a 3× o peso corporal</b>, e o tendão de Aquiles chega a suportar <b>6 a 8×</b>. Só músculo e tendão fortes seguram esse impacto — corrida não constrói essa blindagem.</p>
         <p>É a suspensão que mantém a viatura rodando em terreno ruim: coturno, asfalto, terra e carga externa. Chassi reforçado = menos baixa, mais missão cumprida.</p>
       </div>
       <div class="tcard veh sim-card corners fx zoomable" style="--d:.55s">
@@ -577,7 +778,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 4 ========== -->
 <section class="slide" data-title="DESCLASSIFICAÇÃO DE MITOS">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1091de02f-34f6-4a1f-adf9-210b9cc9b188.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1091de02f-34f6-4a1f-adf9-210b9cc9b188.png')"></div></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 04/08 — INTELIGÊNCIA</div>
     <h2 class="slide-title fx" style="--d:.15s">DESCLASSIFICAÇÃO DE <span class="hl">MITOS</span></h2>
@@ -659,12 +860,38 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 5 ========== -->
 <section class="slide" data-title="OS 4 PILARES DA BLINDAGEM">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1fa8bd624-9af8-439e-a8b9-225b25d33bd3.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1fa8bd624-9af8-439e-a8b9-225b25d33bd3.png')"></div></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 05/08 — DOSSIÊ ANATÔMICO</div>
     <h2 class="slide-title fx" style="--d:.15s">OS 4 PILARES DA <span class="hl">BLINDAGEM</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">Selecione um pilar na coluna da esquerda para expandir o dossiê completo: mecanismo de lesão, biomecânica e ação corretiva.</p>
+    <p class="slide-sub fx" style="--d:.25s">Clique na região da silhueta ou no pilar da lista para abrir o dossiê: mecanismo de lesão, biomecânica e ação corretiva.</p>
     <div class="pil-layout fx" style="--d:.35s">
+      <div class="pil-fig-col corners">
+        <div class="fig-cap">▸ ALVO ANATÔMICO</div>
+        <svg class="bodyfig" viewBox="0 0 200 400" role="img" aria-label="Silhueta com as quatro regiões da blindagem">
+          <g class="outline">
+            <circle cx="100" cy="28" r="16"/>
+            <path d="M100 44 V60"/>
+            <path d="M62 68 Q100 56 138 68"/>
+            <path d="M62 68 L50 148 L44 194"/>
+            <path d="M138 68 L150 148 L156 194"/>
+            <circle cx="44" cy="200" r="6"/><circle cx="156" cy="200" r="6"/>
+          </g>
+          <g class="zone" data-p="3" tabindex="0" role="button" aria-label="Core e lombar">
+            <rect x="68" y="70" width="64" height="94" rx="10"/></g>
+          <g class="zone" data-p="1" tabindex="0" role="button" aria-label="Glúteos e quadril">
+            <rect x="68" y="168" width="64" height="42" rx="10"/></g>
+          <g class="zone" data-p="2" tabindex="0" role="button" aria-label="Coxas: quadríceps e posteriores">
+            <rect x="70" y="214" width="26" height="74" rx="10"/>
+            <rect x="104" y="214" width="26" height="74" rx="10"/></g>
+          <g class="zone" data-p="0" tabindex="0" role="button" aria-label="Panturrilhas e pés">
+            <rect x="72" y="292" width="22" height="66" rx="9"/>
+            <rect x="106" y="292" width="22" height="66" rx="9"/>
+            <rect x="62" y="362" width="32" height="13" rx="4"/>
+            <rect x="106" y="362" width="32" height="13" rx="4"/></g>
+        </svg>
+        <div class="fig-legend" id="figLegend">CLIQUE NA REGIÃO<br>OU NO PILAR AO LADO</div>
+      </div>
       <div class="pil-list" id="pilList"></div>
       <div class="pil-stage corners" id="pilStage">
         <div class="pil-empty" id="pilEmpty">
@@ -679,7 +906,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
 
 <!-- ========== SLIDE 6 ========== -->
 <section class="slide" data-title="TESTE DE PRONTIDÃO">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e812ebaf-c59f-4f86-aaee-f917298ce830.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e812ebaf-c59f-4f86-aaee-f917298ce830.png')"></div></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 06/08 — DINÂMICA AO VIVO NO PÁTIO</div>
     <h2 class="slide-title fx" style="--d:.15s">TESTE DE <span class="hl">PRONTIDÃO OPERACIONAL</span></h2>
@@ -696,7 +923,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
           <div><h4>TESTE 2 — RESISTÊNCIA DE PANTURRILHA · 30s</h4>
           <p>Elevar o calcanhar no ritmo de 1 repetição por segundo, amplitude total, apoio na parede apenas para equilibrar.</p></div>
         </div>
-        <p style="margin-top:18px;font-size:.82rem;color:var(--dim);font-family:var(--f-tech);letter-spacing:.08em">▸ REGRA DO PÁTIO: quem falha no unilateral, falha no coturno. Os dados do teste alimentam o plano do Slide 07.</p>
+        <p style="margin-top:18px;font-size:.82rem;color:var(--dim);font-family:var(--f-tech);letter-spacing:.08em">▸ REGRA DO PÁTIO: quem falha no unilateral, falha no coturno. Os dados do teste alimentam o plano do Slide 08.</p>
       </div>
       <div class="timer-col fx" style="--d:.4s">
         <div class="tcard timer-card corners">
@@ -712,7 +939,7 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
             <div id="timerDisplay">00:15.0<small>CRONÔMETRO TÁTICO</small></div>
           </div>
           <div class="tbar"><div id="timerBar"></div></div>
-          <div id="timerStatus">ARMADO — AGUARDANDO DISPARO</div>
+          <div id="timerStatus" role="status" aria-live="polite">ARMADO — AGUARDANDO DISPARO</div>
           <div class="t-ctrl">
             <button class="btn btn-green" id="tStart">▶ INICIAR</button>
             <button class="btn" id="tPause">❚❚ PAUSAR</button>
@@ -721,41 +948,75 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
           </div>
         </div>
         <div class="crit-col">
-          <div class="crit-block cb-green">✔ SEM BALANÇO / SEM FADIGA = PRONTO</div>
-          <div class="crit-block cb-amber">⚠ ATÉ 2 CORREÇÕES = ATENÇÃO</div>
-          <div class="crit-block cb-red">✖ QUEDA / QUEIMAÇÃO PRECOCE = REFORÇO IMEDIATO</div>
+          <div class="crit-cap">▸ REGISTRE O RESULTADO — A CLASSIFICAÇÃO DEFINE A PRIORIDADE NO PLANO (SLIDE 08)</div>
+          <button class="crit-block cb-green" data-v="ok">✔ SEM BALANÇO / SEM FADIGA = PRONTO</button>
+          <button class="crit-block cb-amber" data-v="warn">⚠ ATÉ 2 CORREÇÕES = ATENÇÃO</button>
+          <button class="crit-block cb-red" data-v="bad">✖ QUEDA / QUEIMAÇÃO PRECOCE = REFORÇO IMEDIATO</button>
+          <div id="verdictOut" aria-live="polite"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== SLIDE 7 ========== -->
+<!-- ========== AQUECIMENTO ========== -->
+<section class="slide" data-title="PROTOCOLO DE ATIVAÇÃO">
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e812ebaf-c59f-4f86-aaee-f917298ce830.png')"></div></div></div>
+  <div class="wrap">
+    <div class="slide-code fx" style="--d:.05s">SLIDE 07/10 — PRÉ-EXECUÇÃO OBRIGATÓRIA</div>
+    <h2 class="slide-title fx" style="--d:.15s">PROTOCOLO DE <span class="hl">ATIVAÇÃO</span></h2>
+    <p class="slide-sub fx" style="--d:.25s">Cinco minutos, sete estações. Nenhum recruta entra no circuito com o chassi frio: músculo frio não absorve impacto — ele repassa a carga direto para o tendão. Dispare o sequenciador e conduza o pelotão estação por estação.</p>
+    <div class="warm-grid">
+      <div class="warm-list fx" style="--d:.3s" id="warmList"></div>
+      <div class="tcard warm-panel corners fx" style="--d:.4s">
+        <div class="warm-stage" id="warmStage">SEQUENCIADOR ARMADO</div>
+        <div id="warmNow">AGUARDANDO DISPARO</div>
+        <div id="warmClock">00:60</div>
+        <div id="warmNext">PRÓXIMA: TROTE LEVE</div>
+        <div class="warm-bar"><div id="warmFill"></div></div>
+        <div class="warm-total"><span id="warmElapsed">00:00</span><span id="warmTotal">TOTAL 05:20</span></div>
+        <div class="warm-ctrl">
+          <button class="btn btn-green" id="wStart">▶ INICIAR</button>
+          <button class="btn" id="wSkip">▸▸ PULAR</button>
+          <button class="btn btn-red" id="wReset">↺ RESETAR</button>
+        </div>
+      </div>
+    </div>
+    <div class="cold-rule fx" style="--d:.55s">
+      <div class="x">▲</div>
+      <div><b>REGRA DO CHASSI FRIO:</b> o aquecimento não é opcional nem encurtável em dia de pressa. Em pátio abaixo de 15 °C ou primeira sessão da manhã, <b>dobre o trote inicial para 2 minutos</b>. Alongamento estático longo fica para <i>depois</i> da sessão — antes, ele reduz a produção de força e não previne lesão.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 8 ========== -->
 <section class="slide" data-title="PLANO OPERACIONAL NO PÁTIO">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1cdd5e228-aa8d-4490-84fc-af89a312ad2e.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1cdd5e228-aa8d-4490-84fc-af89a312ad2e.png')"></div></div></div>
   <div class="wrap">
     <div class="slide-code fx" style="--d:.05s">SLIDE 07/08 — SEM ACADEMIA, SEM DESCULPA</div>
     <h2 class="slide-title fx" style="--d:.15s">PLANO DE TREINO <span class="hl">OPERACIONAL NO PÁTIO</span></h2>
-    <p class="slide-sub fx" style="--d:.25s">Checklist dos 4 exercícios-chave + calculadora de carga da mochila com garrafas PET / sacos de areia.</p>
+    <p class="slide-sub fx" style="--d:.25s">Checklist dos 5 exercícios-chave — um para cada pilar, com o Pilar 01 dobrado em panturrilha — + calculadora de carga da mochila com garrafas PET / sacos de areia.</p>
     <div class="plan-grid">
       <div class="fx" style="--d:.3s">
         <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Afundo Búlgaro</div><div class="ex-dose">3 × 8–10 CADA PERNA · CHASSI + GLÚTEO · DESCIDA EM 2–3s</div></div></label>
+          <div class="ex-info"><div class="ex-name">Elevação de Panturrilha no Degrau</div><div class="ex-dose">3 × 12 · PILAR 01 · DESCIDA LENTA EM 3s, AMPLITUDE TOTAL</div></div></label>
         <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Elevação em Degrau</div><div class="ex-dose">3 × 10 CADA · FREIO DO QUADRÍCEPS · SUBIR EXPLOSIVO</div></div></label>
+          <div class="ex-info"><div class="ex-name">Afundo Búlgaro</div><div class="ex-dose">3 × 8–10 CADA PERNA · PILAR 02 · DESCIDA EM 2–3s</div></div></label>
         <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Ponte Unilateral</div><div class="ex-dose">3 × 10 CADA LADO · GLÚTEO + CORE · PAUSA DE 2s NO TOPO</div></div></label>
+          <div class="ex-info"><div class="ex-name">Elevação em Degrau</div><div class="ex-dose">3 × 10 CADA · PILAR 03 · FREIO DO QUADRÍCEPS, SUBIR EXPLOSIVO</div></div></label>
         <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
-          <div class="ex-info"><div class="ex-name">Prancha</div><div class="ex-dose">3 × 30–45s · SUSTENTAÇÃO DE MOCHILA · QUADRIL NEUTRO</div></div></label>
-        <div class="ex-prog"><span id="exCount">0/4</span><div class="bar"><div id="exBar"></div></div></div>
+          <div class="ex-info"><div class="ex-name">Ponte Unilateral</div><div class="ex-dose">3 × 10 CADA LADO · PILAR 02 · PAUSA DE 2s NO TOPO</div></div></label>
+        <label class="ex-item"><input type="checkbox" class="ex-check"><span class="ex-box"></span>
+          <div class="ex-info"><div class="ex-name">Prancha</div><div class="ex-dose">3 × 30–45s · PILAR 04 · SUSTENTAÇÃO DE MOCHILA, QUADRIL NEUTRO</div></div></label>
+        <div class="ex-prog"><span id="exCount">0/5</span><div class="bar"><div id="exBar"></div></div></div>
         <div id="exReady">✔ CIRCUITO CONFIRMADO — PELOTÃO PRONTO PARA EXECUÇÃO</div>
       </div>
       <div class="tcard calc corners fx" style="--d:.4s">
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><rect x="5" y="7" width="14" height="14"/><path d="M9 7V4h6v3M9 12h6M9 16h6"/></svg>CALCULADORA TÁTICA DE CARGA <span style="color:var(--dim);font-size:.75rem">(RUCK CALCULATOR)</span></h3>
         <div class="calc-row">
           <label>PESO CORPORAL DO RECRUTA:</label><span class="calc-val" id="ruckW">75 KG</span>
-          <input type="range" id="ruckSlider" min="60" max="90" step="1" value="75">
-          <div style="display:flex;justify-content:space-between;font-family:var(--f-tech);font-size:9.5px;color:var(--dim);margin-top:6px"><span>60 KG</span><span>75 KG</span><span>90 KG</span></div>
+          <input type="range" id="ruckSlider" min="50" max="110" step="1" value="75" aria-label="Peso corporal do recruta em quilos">
+          <div style="display:flex;justify-content:space-between;font-family:var(--f-tech);font-size:9.5px;color:var(--dim);margin-top:6px"><span>50 KG</span><span>80 KG</span><span>110 KG</span></div>
         </div>
         <div class="calc-out">
           <div class="co"><small>CARGA SEGURA INICIAL (10%)</small><b><span id="ruckMin">7.5</span> KG</b></div>
@@ -768,21 +1029,56 @@ footer{position:fixed;bottom:0;left:0;right:0;height:var(--botH);z-index:150;
   </div>
 </section>
 
-<!-- ========== SLIDE 8 ========== -->
+<!-- ========== PROGRESSÃO ========== -->
+<section class="slide" data-title="MAPA DE PROGRESSÃO — 8 SEMANAS">
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1cdd5e228-aa8d-4490-84fc-af89a312ad2e.png')"></div></div></div>
+  <div class="wrap">
+    <div class="slide-code fx" style="--d:.05s">SLIDE 09/10 — LINHA DO TEMPO OPERACIONAL</div>
+    <h2 class="slide-title fx" style="--d:.15s">MAPA DE <span class="hl">PROGRESSÃO — 8 SEMANAS</span></h2>
+    <p class="slide-sub fx" style="--d:.25s">O fôlego responde em 4–6 semanas; osso e tendão levam meses. Por isso a carga sobe em degraus, e cada degrau tem um critério de liberação. Selecione a fase para abrir a prescrição.</p>
+    <div class="ph-tabs fx" style="--d:.3s" id="phTabs"></div>
+    <div class="ph-grid">
+      <div class="tcard ph-detail corners fx" style="--d:.4s" id="phDetail" aria-live="polite"></div>
+      <div class="tcard ph-chart corners fx" style="--d:.5s">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>CARGA NA MOCHILA</h3>
+        <p style="font-size:.8rem">Percentual do peso corporal por fase. A barra em âmbar é a fase selecionada.</p>
+        <svg class="chart-svg" viewBox="0 0 320 190" role="img" aria-label="Gráfico da carga da mochila por fase">
+          <line class="axis" x1="26" y1="150" x2="308" y2="150"/>
+          <g data-ph="0"><rect class="bar" x="40" y="146" width="46" height="4"/><text class="bval" x="63" y="138" text-anchor="middle">0%</text><text class="blab" x="63" y="168" text-anchor="middle">S1–2</text></g>
+          <g data-ph="1"><rect class="bar" x="110" y="78" width="46" height="72"/><text class="bval" x="133" y="70" text-anchor="middle">10%</text><text class="blab" x="133" y="168" text-anchor="middle">S3–4</text></g>
+          <g data-ph="2"><rect class="bar" x="180" y="64" width="46" height="86"/><text class="bval" x="203" y="56" text-anchor="middle">12%</text><text class="blab" x="203" y="168" text-anchor="middle">S5–6</text></g>
+          <g data-ph="3"><rect class="bar" x="250" y="43" width="46" height="107"/><text class="bval" x="273" y="35" text-anchor="middle">15%</text><text class="blab" x="273" y="168" text-anchor="middle">S7–8</text></g>
+          </svg>
+        <p class="golden"><b>REGRA DE OURO:</b> nunca subir carga da mochila e quilometragem de corrida na mesma semana. Uma variável por vez — se doer, você precisa saber qual delas causou.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 10 ========== -->
 <section class="slide" data-title="ORDEM DE OPERAÇÕES FINAL">
-  <div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e49350c5-445f-40cc-bd81-b2f8780b1d2e.png')"></div></div>
+  <div class="bg-clip"><div class="slide-bg"><div class="slide-bg-img" style="background-image:url('https://image.qwenlm.ai/public_source/3c5e845a-ac5a-42a8-90a3-d5a129507a63/1e49350c5-445f-40cc-bd81-b2f8780b1d2e.png')"></div></div></div>
   <div class="wrap final">
-    <div class="slide-code fx" style="--d:.05s">SLIDE 08/08 — FECHAMENTO</div>
+    <div class="slide-code fx" style="--d:.05s">SLIDE 10/10 — FECHAMENTO</div>
     <h2 class="slide-title fx" style="--d:.15s">ORDEM DE OPERAÇÕES <span class="hl">FINAL</span></h2>
     <div class="dir-chips fx" style="--d:.3s">
+      <div class="dir corners" style="--cc:var(--amber)"><small>ANTES DE TUDO</small><b>5 MIN</b><small>ATIVAÇÃO OBRIGATÓRIA</small></div>
       <div class="dir corners" style="--cc:var(--green)"><small>FREQUÊNCIA</small><b>2–3×</b><small>SESSÕES / SEMANA</small></div>
       <div class="dir corners" style="--cc:var(--green)"><small>DURAÇÃO</small><b>20 MIN</b><small>POR SESSÃO</small></div>
       <div class="dir corners" style="--cc:var(--green)"><small>PROGRESSÃO</small><b>+1 REP</b><small>POR SESSÃO</small></div>
+      <div class="dir corners" style="--cc:var(--green)"><small>HORIZONTE</small><b>8 SEM</b><small>4 FASES COM CRITÉRIO</small></div>
     </div>
     <p class="final-quote fx" style="--d:.45s">A partir de hoje, cada afundo, cada elevação e cada prancha é <b style="color:var(--green)">manutenção preventiva da sua viatura</b>. Dor em articulação é luz no painel: reporte ao monitor. Constância vale mais que intensidade.</p>
     <div class="fx" style="--d:.6s;margin-top:26px">
       <span class="badge b-amber">OPERAÇÃO CHASSI BLINDADO — CUMPRIDA</span>
     </div>
+    <div class="safety fx" style="--d:.68s">
+      <b>⚠ RESSALVA DE COMANDO:</b> conteúdo instrucional de prevenção, não substitui avaliação médica.
+      Dor persistente, edema ou dor que piora durante o esforço = apresentar-se à seção de saúde antes de progredir carga.
+    </div>
+    <div class="refs fx" style="--d:.72s">FONTES: Lauersen et al., <i>Br J Sports Med</i> (2014) — treino de força e redução de lesões por sobrecarga ·
+      Rønnestad &amp; Mujika, <i>Scand J Med Sci Sports</i> (2014) — força e economia de corrida ·
+      Blagrove et al., <i>Sports Med</i> (2018) · Diretrizes de TFM — EB20-MC-10.350.</div>
     <div class="selva fx" style="--d:.75s">SELVA!</div>
     <div class="fx" style="--d:.9s"><button class="btn" id="restartBtn">↺ REINICIAR BRIEFING</button></div>
   </div>
@@ -807,6 +1103,13 @@ const slides=$$('.slide'), total=slides.length;
 let current=0; const visited=new Set([0]);
 const relayoutFns=[];
 
+/* numeração dos slides gerada a partir do total (evita 01/08 chumbado no HTML) */
+slides.forEach((s,i)=>{
+  const code=s.querySelector('.slide-code');
+  if(code)code.textContent=code.textContent.replace(/^SLIDE\s*\d+\s*\/\s*\d+/,
+    'SLIDE '+String(i+1).padStart(2,'0')+'/'+String(total).padStart(2,'0'));
+});
+
 /* ================= ÁUDIO ================= */
 let audioCtx=null, soundOn=true;
 function beep(freq=880,dur=.12,type='square',vol=.16){
@@ -820,6 +1123,25 @@ function beep(freq=880,dur=.12,type='square',vol=.16){
     o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+dur+.03);
   }catch(e){}
 }
+function gunSound(){
+  if(!soundOn)return;
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const t=audioCtx.currentTime,sr=audioCtx.sampleRate,len=Math.floor(sr*.3);
+    const buf=audioCtx.createBuffer(1,len,sr),d=buf.getChannelData(0);
+    for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3.4);
+    const src=audioCtx.createBufferSource();src.buffer=buf;
+    const lp=audioCtx.createBiquadFilter();lp.type='lowpass';
+    lp.frequency.setValueAtTime(2800,t);lp.frequency.exponentialRampToValueAtTime(260,t+.24);
+    const g=audioCtx.createGain();g.gain.setValueAtTime(.3,t);g.gain.exponentialRampToValueAtTime(.0001,t+.3);
+    src.connect(lp);lp.connect(g);g.connect(audioCtx.destination);src.start(t);
+    const o=audioCtx.createOscillator(),og=audioCtx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(40,t+.17);
+    og.gain.setValueAtTime(.26,t);og.gain.exponentialRampToValueAtTime(.0001,t+.21);
+    o.connect(og);og.connect(audioCtx.destination);o.start(t);o.stop(t+.25);
+  }catch(e){}
+}
 function endSound(){beep(880,.14);setTimeout(()=>beep(880,.14),180);setTimeout(()=>beep(1318,.45),360);}
 
 /* ================= NAVEGAÇÃO ================= */
@@ -831,13 +1153,15 @@ function go(i){
   slides[current].classList.remove('active');
   current=i;visited.add(i);
   slides[i].classList.add('active');slides[i].scrollTop=0;
+  clearShots();if(i===0)scheduleShots();
   updateHud();
-  setTimeout(()=>relayoutFns.forEach(f=>f()),650);
+  setTimeout(()=>{relayoutFns.forEach(f=>f());checkOverflow();},650);
+  setTimeout(checkOverflow,60);
   beep(520,.05,'square',.06);
 }
 function updateHud(){
   $('#progressFill').style.width=(((current+1)/total)*100)+'%';
-  $('#counter').textContent='SLIDE '+String(current+1).padStart(2,'0')+'/'+total;
+  $('#counter').textContent='SLIDE '+String(current+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
   $$('.dot').forEach((d,i)=>d.classList.toggle('on',i===current));
   $$('#menuList .menu-item').forEach((b,i)=>{
     const st=b.querySelector('.mi-status');
@@ -872,6 +1196,7 @@ document.addEventListener('click',e=>{if(!menuPanel.contains(e.target)&&!menuBtn
 window.addEventListener('keydown',e=>{
   const tag=document.activeElement&&document.activeElement.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA')return;
+  if(e.key===' '&&tag==='BUTTON')return; /* espaço aciona o botão focado, não avança o slide */
   if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(current+1);}
   else if(e.key==='ArrowLeft'){e.preventDefault();go(current-1);}
   else if(e.key==='Home'){go(0);}
@@ -911,9 +1236,15 @@ slides.forEach(s=>{
   const bg=s.querySelector('.slide-bg');
   if(bg)pxBgs.push({s,bg});
 });
-let pmx=0,pmy=0,scmx=0,scmy=0;
-window.addEventListener('mousemove',e=>{pmx=(e.clientX/innerWidth-.5);pmy=(e.clientY/innerHeight-.5);});
+let pmx=0,pmy=0,scmx=0,scmy=0,pxDirty=true;
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!REDUCE&&matchMedia('(pointer:fine)').matches){
+  window.addEventListener('mousemove',e=>{pmx=(e.clientX/innerWidth-.5);pmy=(e.clientY/innerHeight-.5);pxDirty=true;});
+}
 (function pxLoop(){
+  requestAnimationFrame(pxLoop);
+  if(!pxDirty&&Math.abs(pmx-scmx)<.0015&&Math.abs(pmy-scmy)<.0015)return; /* ocioso: não repinta à toa */
+  pxDirty=false;
   scmx+=(pmx-scmx)*.05;scmy+=(pmy-scmy)*.05;
   for(const o of pxBgs){
     if(!o.s.classList.contains('active'))continue;
@@ -922,8 +1253,17 @@ window.addEventListener('mousemove',e=>{pmx=(e.clientX/innerWidth-.5);pmy=(e.cli
     const x=scmx*-14;
     o.bg.style.transform='translate3d('+x.toFixed(1)+'px,'+ty.toFixed(1)+'px,0)';
   }
-  requestAnimationFrame(pxLoop);
 })();
+
+/* ===== DICA DE ROLAGEM: avisa quando o slide tem conteúdo abaixo da dobra ===== */
+const scrollHint=$('#scrollHint');
+function checkOverflow(){
+  const s=slides[current];
+  const more=s.scrollHeight-s.clientHeight>60&&s.scrollTop<24;
+  scrollHint.classList.toggle('show',more);
+}
+slides.forEach(s=>s.addEventListener('scroll',()=>{pxDirty=true;checkOverflow();},{passive:true}));
+window.addEventListener('resize',checkOverflow);
 
 /* ================= CARROSSEL ================= */
 function makeCarousel(rootSel,cfg){
@@ -1004,6 +1344,13 @@ function closeZoom(){
   beep(440,.07,'square',.08);
   const finish=()=>{
     if(zoomDone)return;zoomDone=true;
+    if(card.classList.contains('sim-card')){ /* devolve o estado da simulação ao card original */
+      const on=c.classList.contains('sim-on');
+      card.classList.toggle('sim-on',on);
+      const bt=card.querySelector('.simToggle'),rd=card.querySelector('.sim-read');
+      if(bt)bt.textContent=on?'■ INTERROMPER SIMULAÇÃO':'▶ SIMULAR EFEITO MOLA';
+      if(rd)rd.textContent=on?SIM_ON:SIM_OFF;
+    }
     c.remove();card.classList.remove('ghost');zoomClone=null;zoomSrc=null;
   };
   setTimeout(finish,620);
@@ -1069,15 +1416,26 @@ PILLARS.forEach((p,i)=>{
   b.onclick=()=>togglePillar(i);
   pilList.appendChild(b);
 });
+const figZones=$$('.bodyfig .zone'),figLegend=$('#figLegend');
+figZones.forEach(z=>{
+  z.addEventListener('click',()=>togglePillar(+z.dataset.p));
+  z.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePillar(+z.dataset.p);}});
+});
+function syncFig(i){
+  figZones.forEach(z=>z.classList.toggle('on',+z.dataset.p===i));
+  if(i<0){figLegend.textContent='CLIQUE NA REGIÃO OU NO PILAR AO LADO';figLegend.classList.remove('on');}
+  else{figLegend.innerHTML='▸ REGIÃO '+PILLARS[i].num+'<br>'+PILLARS[i].title.toUpperCase();figLegend.classList.add('on');}
+}
 function togglePillar(i){
   const items=pilList.querySelectorAll('.pil-item');
   if(pilActive===i){
-    pilActive=-1;
+    pilActive=-1;syncFig(-1);
     items.forEach(it=>{it.classList.remove('active');it.querySelector('.pil-ico').textContent='+';});
     pilDetail.classList.remove('in');pilDetail.innerHTML='';pilEmpty.style.display='flex';
     beep(420,.06,'square',.08);
     return;
   }
+  syncFig(i);
   pilActive=i;
   items.forEach((it,j)=>{
     it.classList.toggle('active',j===i);
@@ -1147,25 +1505,339 @@ function ruckUpdate(){
   $('#ruckW').textContent=w+' KG';
   $('#ruckMin').textContent=min.toFixed(1);
   $('#ruckMax').textContent=max.toFixed(1);
-  $('#ruckBottles').textContent=Math.round(min);
-  ruck.style.background='linear-gradient(90deg,var(--green) '+(((w-60)/30)*100)+'%,#2A3A27 0)';
+  /* arredonda para baixo: garrafa a mais não pode estourar a carga segura */
+  $('#ruckBottles').textContent=Math.floor(min);
+  const pct=((w-ruck.min)/(ruck.max-ruck.min))*100;
+  ruck.style.background='linear-gradient(90deg,var(--green) '+pct.toFixed(1)+'%,#2A3A27 0)';
 }
 ruck.addEventListener('input',ruckUpdate);
+ruck.addEventListener('change',saveState);
 
 /* ================= CHECKLIST ================= */
-const checks=$$('.ex-check');
+const checks=$$('.ex-check'),exTotal=checks.length;
 function exUpdate(){
   const n=checks.filter(c=>c.checked).length;
-  $('#exCount').textContent=n+'/4';
-  $('#exBar').style.width=(n/4*100)+'%';
-  $('#exReady').classList.toggle('show',n===4);
+  $('#exCount').textContent=n+'/'+exTotal;
+  $('#exBar').style.width=(n/exTotal*100)+'%';
+  $('#exReady').classList.toggle('show',n===exTotal);
   beep(n>0?700:400,.05,'square',.06);
 }
-checks.forEach(c=>c.addEventListener('change',exUpdate));
+checks.forEach(c=>c.addEventListener('change',()=>{exUpdate();saveState();}));
+
+/* ================= REGISTRO DO TESTE ================= */
+const VERDICTS={
+  ok:{t:'CLASSIFICAÇÃO: PRONTO',d:'Chassi estável. Manter os 5 exercícios 2–3× por semana e progredir <b>+1 repetição por sessão</b>. Liberado para iniciar a marcha com 10% do peso corporal.'},
+  warn:{t:'CLASSIFICAÇÃO: ATENÇÃO',d:'Prioridade nos <b>Pilares 01 e 02</b> (panturrilha/pés e glúteos). Dobrar a série de elevação de panturrilha e ponte unilateral por 2 semanas antes de somar carga na mochila.'},
+  bad:{t:'CLASSIFICAÇÃO: REFORÇO IMEDIATO',d:'Sem carga externa por 2 semanas. Foco total em <b>Pilar 01 + Pilar 04</b> (panturrilha e core), amplitude parcial e sem dor. Se houver dor localizada na tíbia, apresentar-se à seção de saúde antes de retomar impacto.'}
+};
+const verdictOut=$('#verdictOut');
+let currentVerdict=null;
+function applyVerdict(b,sound){
+  $$('.crit-block[data-v]').forEach(o=>o.classList.remove('picked'));
+  b.classList.add('picked');
+  currentVerdict=b.dataset.v;
+  const v=VERDICTS[currentVerdict];
+  verdictOut.innerHTML='<b>'+v.t+'</b><br>'+v.d;
+  verdictOut.classList.add('show');
+  if(sound)beep(760,.08,'square',.11);
+}
+$$('.crit-block[data-v]').forEach(b=>b.onclick=()=>{applyVerdict(b,true);saveState();});
+
+/* ================= AQUECIMENTO ================= */
+const WARM=[
+ {n:'Trote leve',d:'No lugar ou 40 m ida e volta. Ritmo de conversa — só elevar a temperatura.',s:60},
+ {n:'Mobilidade de tornozelo',d:'Joelho à parede, 10 por lado. Calcanhar nunca sai do chão.',s:40},
+ {n:'Balanço de perna',d:'Frente/trás e lateral, 10 por lado, amplitude crescente. Apoio na parede.',s:40},
+ {n:'Agachamento + ponte',d:'15 agachamentos livres e 15 pontes de glúteo, ritmo controlado.',s:60},
+ {n:'Elevação de panturrilha',d:'20 repetições em amplitude total. Prepara o Pilar 01 para o impacto.',s:40},
+ {n:'Marcha com joelho alto',d:'No lugar, tronco ereto, core ativo. Sem inclinar para trás.',s:40},
+ {n:'Saltos baixos no lugar',d:'Aterrissagem silenciosa, joelho alinhado ao pé. Ativa o efeito mola.',s:40}
+];
+const warmList=$('#warmList');
+WARM.forEach((w,i)=>{
+  const d=document.createElement('div');d.className='warm-item corners';
+  d.innerHTML='<span class="wi-num">'+String(i+1).padStart(2,'0')+'</span>'+
+    '<div class="wi-body"><h4>'+w.n+'</h4><p>'+w.d+'</p></div>'+
+    '<span class="wi-sec">'+w.s+'s</span>';
+  warmList.appendChild(d);
+});
+const WTOTAL=WARM.reduce((a,w)=>a+w.s,0);
+const wClock=$('#warmClock'),wNow=$('#warmNow'),wNext=$('#warmNext'),wStage=$('#warmStage'),
+      wFill=$('#warmFill'),wElap=$('#warmElapsed');
+let wIdx=-1,wRem=0,wRun=false,wRaf=null,wLast=0,wCeil=99,wElapsed=0;
+$('#warmTotal').textContent='TOTAL '+fmtMS(WTOTAL);
+function fmtMS(t){const m=Math.floor(t/60),sc=Math.floor(t%60);
+  return String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');}
+function warmRender(){
+  wClock.textContent=fmtMS(Math.ceil(wRem));
+  wClock.classList.toggle('low',wRem<=3.05&&wIdx>=0);
+  wFill.style.width=(wElapsed/WTOTAL*100)+'%';
+  wElap.textContent=fmtMS(wElapsed);
+  $$('.warm-item').forEach((el,i)=>{
+    el.classList.toggle('now',i===wIdx);
+    el.classList.toggle('done',i<wIdx);
+  });
+  if(wIdx<0){wNow.textContent='AGUARDANDO DISPARO';wNext.textContent='PRÓXIMA: '+WARM[0].n.toUpperCase();}
+  else if(wIdx>=WARM.length){wNow.textContent='AQUECIMENTO CONCLUÍDO';wNext.textContent='PELOTÃO LIBERADO PARA O CIRCUITO';}
+  else{wNow.textContent=WARM[wIdx].n;
+    wNext.textContent=wIdx+1<WARM.length?'PRÓXIMA: '+WARM[wIdx+1].n.toUpperCase():'ÚLTIMA ESTAÇÃO';}
+}
+function warmEnter(i){
+  wIdx=i;
+  if(i>=WARM.length){warmStop();wStage.textContent='SEQUÊNCIA COMPLETA';wRem=0;warmRender();endSound();return;}
+  wRem=WARM[i].s;wCeil=99;warmRender();beep(980,.1,'square',.13);
+}
+function warmLoop(ts){
+  if(!wRun)return;
+  const dt=(ts-wLast)/1000;wLast=ts;
+  wRem=Math.max(0,wRem-dt);wElapsed=Math.min(WTOTAL,wElapsed+dt);
+  const c=Math.ceil(wRem);
+  if(c!==wCeil){if(c<=3&&c>0)beep(700,.09,'square',.14);wCeil=c;}
+  warmRender();
+  if(wRem<=0){warmEnter(wIdx+1);if(wIdx>=WARM.length)return;}
+  wRaf=requestAnimationFrame(warmLoop);
+}
+function warmStop(){wRun=false;cancelAnimationFrame(wRaf);$('#wStart').textContent='▶ INICIAR';}
+$('#wStart').onclick=function(){
+  if(wRun){warmStop();wStage.textContent='PAUSADO';return;}
+  if(wIdx<0||wIdx>=WARM.length){wIdx=-1;wElapsed=0;warmEnter(0);}
+  wRun=true;wLast=performance.now();this.textContent='❚❚ PAUSAR';
+  wStage.textContent='EM EXECUÇÃO — ESTAÇÃO '+(wIdx+1)+'/'+WARM.length;
+  wRaf=requestAnimationFrame(warmLoop);
+};
+$('#wSkip').onclick=()=>{
+  if(wIdx<0){warmEnter(0);}
+  else{wElapsed=Math.min(WTOTAL,wElapsed+wRem);warmEnter(wIdx+1);}
+  if(wIdx<WARM.length)wStage.textContent='ESTAÇÃO '+(wIdx+1)+'/'+WARM.length;
+};
+$('#wReset').onclick=()=>{warmStop();wIdx=-1;wRem=WARM[0].s;wElapsed=0;wCeil=99;
+  wStage.textContent='SEQUENCIADOR ARMADO';warmRender();beep(420,.06,'square',.08);};
+wRem=WARM[0].s;warmRender();
+
+/* ================= PROGRESSÃO 8 SEMANAS ================= */
+const PHASES=[
+ {t:'FASE 1 — ADAPTAÇÃO',w:'SEMANAS 1–2',
+  rows:[['FREQUÊNCIA','2× / semana'],['VOLUME','2 séries por exercício'],['CARGA NA MOCHILA','Nenhuma — só peso corporal'],['CORRIDA','Mantém o volume atual']],
+  txt:'Aprender o padrão de movimento antes de somar carga. Técnica limpa vale mais que número de repetições — o objetivo aqui é ensinar o chassi a se posicionar, não fatigá-lo.',
+  gate:'Executar os 5 exercícios com técnica intacta e acordar sem dor no dia seguinte.'},
+ {t:'FASE 2 — CONSTRUÇÃO',w:'SEMANAS 3–4',
+  rows:[['FREQUÊNCIA','2–3× / semana'],['VOLUME','3 séries · +1 rep por sessão'],['CARGA NA MOCHILA','10% do PC · 1 marcha de 3 km'],['CORRIDA','Volume atual + 10% no máximo']],
+  txt:'Entra a sobrecarga progressiva. É aqui que o tendão começa a responder — e é aqui que a pressa causa canelite. A mochila aparece uma vez por semana, em terreno plano.',
+  gate:'Sem dor na borda da tíbia nas 48 h seguintes à marcha com carga.'},
+ {t:'FASE 3 — CARGA',w:'SEMANAS 5–6',
+  rows:[['FREQUÊNCIA','3× / semana'],['VOLUME','3 séries · excêntrica de 3 s'],['CARGA NA MOCHILA','12% do PC · 5 km'],['CORRIDA','Introduzir 1 sessão em terreno irregular']],
+  txt:'A fase da frenagem: descer devagar é o que blinda contra descidas e aterrissagens. O tempo sob tensão sobe antes de a carga externa subir de novo.',
+  gate:'Repetir o teste unipodal de 15 s sem correção de equilíbrio (Slide 06).'},
+ {t:'FASE 4 — CONSOLIDAÇÃO',w:'SEMANAS 7–8',
+  rows:[['FREQUÊNCIA','2–3× / semana (manutenção)'],['VOLUME','3–4 séries · carga desafiadora'],['CARGA NA MOCHILA','15% do PC · 6–8 km'],['CORRIDA','Simulado de TAF na semana 8']],
+  txt:'Chassi blindado. A partir daqui a força vira manutenção preventiva permanente: reduzir a frequência é aceitável, abandonar não. Perde-se adaptação de tendão em poucas semanas sem estímulo.',
+  gate:'TAF simulado completo sem dor articular durante ou após a prova.'}
+];
+const phTabs=$('#phTabs'),phDetail=$('#phDetail');
+let phActive=0;
+PHASES.forEach((f,i)=>{
+  const b=document.createElement('button');b.className='ph-tab corners';
+  b.innerHTML='<small>'+f.w+'</small><b>'+f.t.split('— ')[1]+'</b>';
+  b.onclick=()=>{setPhase(i);saveState();};
+  phTabs.appendChild(b);
+});
+function setPhase(i){
+  phActive=i;const f=PHASES[i];
+  $$('.ph-tab').forEach((b,j)=>b.classList.toggle('on',j===i));
+  $$('.chart-svg g[data-ph]').forEach(g=>g.classList.toggle('on',+g.dataset.ph===i));
+  phDetail.innerHTML='<div class="pd-head"><span class="p-num">0'+(i+1)+'</span>'+
+    '<div><h3>'+f.t.split(' — ')[1]+'</h3><span>'+f.w+'</span></div></div>'+
+    '<p style="margin-top:16px;font-size:.98rem;line-height:1.7;color:var(--muted)">'+f.txt+'</p>'+
+    '<div class="ph-rows">'+f.rows.map(r=>'<div class="ph-row"><small>'+r[0]+'</small><b>'+r[1]+'</b></div>').join('')+'</div>'+
+    '<div class="ph-gate"><b>▸ CRITÉRIO PARA AVANÇAR DE FASE</b>'+f.gate+'</div>';
+  phDetail.classList.remove('in');void phDetail.offsetWidth;phDetail.classList.add('in');
+  beep(760,.06,'square',.09);
+}
+
+/* ================= PERSISTÊNCIA ================= */
+const STORE='chassiBlindado_v1';
+let hasStore=true;
+try{localStorage.setItem(STORE+'_t','1');localStorage.removeItem(STORE+'_t');}catch(e){hasStore=false;}
+function saveState(){
+  if(!hasStore)return;
+  try{localStorage.setItem(STORE,JSON.stringify({
+    ex:checks.map(c=>c.checked),verdict:currentVerdict,phase:phActive,w:+ruck.value
+  }));$('#saveTag').textContent='SALVO';$('#saveTag').className='mi-status st-done';}catch(e){}
+}
+function restoreState(){
+  if(!hasStore){$('#saveTag').textContent='INDISPONÍVEL';return;}
+  let st=null;try{st=JSON.parse(localStorage.getItem(STORE));}catch(e){}
+  if(!st){$('#saveTag').textContent='VAZIO';return;}
+  if(Array.isArray(st.ex))checks.forEach((c,i)=>c.checked=!!st.ex[i]);
+  if(typeof st.w==='number'){ruck.value=st.w;ruckUpdate();}
+  if(st.verdict){const b=document.querySelector('.crit-block[data-v="'+st.verdict+'"]');if(b)applyVerdict(b,false);}
+  if(typeof st.phase==='number')setPhase(st.phase);
+  const n=checks.filter(c=>c.checked).length;
+  $('#exCount').textContent=n+'/'+exTotal;$('#exBar').style.width=(n/exTotal*100)+'%';
+  $('#exReady').classList.toggle('show',n===exTotal);
+  $('#saveTag').textContent='RESTAURADO';$('#saveTag').className='mi-status st-done';
+}
+$('#clearState').onclick=()=>{
+  try{localStorage.removeItem(STORE);}catch(e){}
+  checks.forEach(c=>c.checked=false);exUpdate();
+  currentVerdict=null;verdictOut.classList.remove('show');
+  $$('.crit-block[data-v]').forEach(o=>o.classList.remove('picked'));
+  setPhase(0);ruck.value=75;ruckUpdate();
+  $('#saveTag').textContent='LIMPO';$('#saveTag').className='mi-status st-pending';
+  closeMenu();beep(420,.07,'square',.1);
+};
+
+/* ================= DISPAROS NO TÍTULO ================= */
+const NS='http://www.w3.org/2000/svg';
+const shotLayer=$('#shotFx'),shotFlash=$('#shotFlash');
+let shotTimers=[];
+
+function mk(tag,attrs){const e=document.createElementNS(NS,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+
+/* traça uma linha irregular — usada nas trincas e no rasgo */
+function jagged(x0,y0,x1,y1,segs,amp,lip){
+  /* passos irregulares e desvios alternados: uma trinca é angulosa,
+     não ondulada — e a amplitude decai à medida que se afasta do furo */
+  const pts=[[x0,y0]];let acc=0;const steps=[];
+  for(let i=0;i<segs;i++){const w=.45+Math.random();steps.push(w);acc+=w}
+  let t=0,sign=Math.random()<.5?1:-1;
+  for(let i=0;i<segs;i++){
+    t+=steps[i]/acc;
+    const decay=Math.max(.12,1-t*.88); /* a trinca se fecha ao se afastar do furo */
+    const off=(i===segs-1)?0:sign*(amp*.35+Math.random()*amp)*decay;
+    sign*=-1;
+    pts.push([x0+(x1-x0)*t+off*.22,y0+(y1-y0)*t+off]);
+  }
+  let d='M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);
+  for(let i=1;i<pts.length;i++)d+=' L'+pts[i][0].toFixed(1)+','+pts[i][1].toFixed(1);
+  if(lip){/* segunda borda, deslocada: sugere os dois lados do rasgo */
+    let d2='M'+pts[0][0].toFixed(1)+','+(pts[0][1]+lip).toFixed(1);
+    for(let i=1;i<pts.length;i++)d2+=' L'+pts[i][0].toFixed(1)+','+(pts[i][1]+lip*(1-i/pts.length)).toFixed(1);
+    return [d,d2];
+  }
+  return d;
+}
+function draw(path,dur,delay,easing){
+  const L=path.getTotalLength();
+  path.setAttribute('stroke-dasharray',L);
+  path.setAttribute('stroke-dashoffset',L);
+  if(REDUCE){path.setAttribute('stroke-dashoffset',0);return;}
+  path.animate([{strokeDashoffset:L},{strokeDashoffset:0}],
+    {duration:dur,delay:delay||0,easing:easing||'cubic-bezier(.15,.85,.25,1)',fill:'forwards'});
+}
+
+function clearShots(){
+  shotTimers.forEach(clearTimeout);shotTimers=[];
+  shotLayer.innerHTML='';
+  $$('.hero-title .ch.struck').forEach(c=>c.classList.remove('struck'));
+}
+
+function impact(x,y,el){
+  const W=innerWidth,H=innerHeight;
+  const svg=mk('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'none'});
+  const g=mk('g',{});svg.appendChild(g);
+
+  /* 1 — rasgo atravessando a tela, abrindo para os dois lados */
+  const defs=mk('defs',{});svg.appendChild(defs);
+  const uid='tr'+Math.random().toString(36).slice(2,8);
+  [[-60,y+(Math.random()*60-30),0],[W+60,y+(Math.random()*60-30),1]].forEach((dst,k)=>{
+    /* gradiente que apaga a linha nas bordas da tela — sem isso o rasgo
+       vira um traço decorativo de ponta a ponta */
+    const gr=mk('linearGradient',{id:uid+k,gradientUnits:'userSpaceOnUse',
+      x1:x,y1:y,x2:(k?W:0),y2:y});
+    gr.appendChild(mk('stop',{offset:'0','stop-color':'#FFE9B8','stop-opacity':'1'}));
+    gr.appendChild(mk('stop',{offset:'.18','stop-color':'#F59E0B','stop-opacity':'.95'}));
+    gr.appendChild(mk('stop',{offset:'.62','stop-color':'#F59E0B','stop-opacity':'.5'}));
+    gr.appendChild(mk('stop',{offset:'1','stop-color':'#F59E0B','stop-opacity':'0'}));
+    defs.appendChild(gr);
+    const pair=jagged(x,y,dst[0],dst[1],16,10,4+Math.random()*3);
+    const dd=pair[0],dd2=pair[1];
+    const back=mk('path',{d:dd,fill:'none',stroke:'#03060A',
+      'stroke-width':6,'stroke-linejoin':'miter','stroke-linecap':'round',opacity:.5});
+    const lip=mk('path',{d:dd2,fill:'none',stroke:'url(#'+uid+k+')',
+      'stroke-width':1,'stroke-linejoin':'miter',opacity:.26});
+    const edge=mk('path',{d:dd,fill:'none',stroke:'url(#'+uid+k+')',
+      'stroke-width':1.8,'stroke-linejoin':'miter'});
+    edge.style.filter='drop-shadow(0 0 5px rgba(245,158,11,.7))';
+    g.appendChild(back);g.appendChild(lip);g.appendChild(edge);
+    draw(back,430,40+k*30);draw(lip,470,70+k*30);draw(edge,430,40+k*30);
+    if(!REDUCE)edge.animate([{opacity:1},{opacity:1,offset:.55},{opacity:.5}],
+      {duration:1200,delay:200,fill:'forwards'});
+  });
+
+  /* 2 — trincas radiais */
+  const nC=7;
+  for(let i=0;i<nC;i++){
+    const a=(Math.PI*2/nC)*i+Math.random()*.5,len=60+Math.random()*120;
+    const dd=jagged(x,y,x+Math.cos(a)*len,y+Math.sin(a)*len,4,10);
+    const c=mk('path',{d:dd,fill:'none',stroke:'#8A9C86','stroke-width':1.4,opacity:.7});
+    g.appendChild(c);draw(c,300,60+i*18);
+  }
+
+  /* 3 — furo e anel de choque */
+  const hole=mk('circle',{cx:x,cy:y,r:15,fill:'#05080A',stroke:'#F59E0B','stroke-width':2});
+  hole.style.transformBox='fill-box';hole.style.transformOrigin='center';
+  g.appendChild(hole);
+  if(!REDUCE)hole.animate([{transform:'scale(0)'},{transform:'scale(1.35)',offset:.45},{transform:'scale(1)'}],
+    {duration:280,easing:'cubic-bezier(.2,1.4,.4,1)',fill:'forwards'});
+
+  const ring=mk('circle',{cx:x,cy:y,r:15,fill:'none',stroke:'#F59E0B','stroke-width':2.5});
+  ring.style.transformBox='fill-box';ring.style.transformOrigin='center';
+  g.appendChild(ring);
+  if(!REDUCE)ring.animate([{transform:'scale(1)',opacity:.9},{transform:'scale(4.2)',opacity:0}],
+    {duration:620,easing:'cubic-bezier(.1,.8,.2,1)',fill:'forwards'});
+
+  /* 4 — clarão do impacto */
+  const fg=mk('radialGradient',{id:uid+'f'});
+  fg.appendChild(mk('stop',{offset:'0','stop-color':'#FFFDF5','stop-opacity':'1'}));
+  fg.appendChild(mk('stop',{offset:'.35','stop-color':'#FFD98A','stop-opacity':'.85'}));
+  fg.appendChild(mk('stop',{offset:'1','stop-color':'#F59E0B','stop-opacity':'0'}));
+  defs.appendChild(fg);
+  const flash=mk('circle',{cx:x,cy:y,r:30,fill:'url(#'+uid+'f)'});
+  flash.style.transformBox='fill-box';flash.style.transformOrigin='center';
+  g.appendChild(flash);
+  if(!REDUCE)flash.animate([{transform:'scale(.2)',opacity:1},{transform:'scale(3.4)',opacity:0}],
+    {duration:230,easing:'ease-out',fill:'forwards'});
+  else flash.remove();
+
+  /* 5 — estilhaços */
+  if(!REDUCE)for(let i=0;i<10;i++){
+    const a=Math.random()*Math.PI*2,dist=50+Math.random()*130,sz=1.5+Math.random()*3;
+    const sh=mk('rect',{x:x-sz/2,y:y-sz/2,width:sz,height:sz*1.8,fill:'#C8D4C4',opacity:.9});
+    g.appendChild(sh);
+    sh.animate([{transform:'translate(0,0) rotate(0deg)',opacity:1},
+      {transform:'translate('+Math.cos(a)*dist+'px,'+(Math.sin(a)*dist+40)+'px) rotate('+(Math.random()*540-270)+'deg)',opacity:0}],
+      {duration:520+Math.random()*260,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  }
+
+  shotLayer.appendChild(svg);
+  if(el)el.classList.add('struck');
+  gunSound();
+  if(!REDUCE){
+    shotFlash.classList.remove('on');void shotFlash.offsetWidth;shotFlash.classList.add('on');
+    document.body.classList.remove('shake');void document.body.offsetWidth;
+    document.body.classList.add('shake');
+    shotTimers.push(setTimeout(()=>document.body.classList.remove('shake'),420));
+  }
+}
+
+function fireAt(id,delay){
+  shotTimers.push(setTimeout(()=>{
+    const el=$('#'+id);if(!el||!slides[0].classList.contains('active'))return;
+    const r=el.getBoundingClientRect();
+    if(!r.width)return;
+    impact(r.left+r.width*.52,r.top+r.height*.52,el);
+  },delay));
+}
+/* o título termina de pousar por volta de 1,8s — os tiros vêm logo depois */
+function scheduleShots(){clearShots();fireAt('hitA',1950);fireAt('hitB',2330);}
+addEventListener('resize',()=>{if(shotLayer.children.length)clearShots();});
 
 /* ================= INIT ================= */
-slides[0].classList.add('active');visited.add(0);
-ruckUpdate();renderTimer();updateHud();
+slides[0].classList.add('active');visited.add(0);scheduleShots();
+ruckUpdate();renderTimer();updateHud();setPhase(0);restoreState();
+setTimeout(checkOverflow,400);
 </script>
 </body>
 </html>
