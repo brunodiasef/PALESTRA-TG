@@ -1718,6 +1718,17 @@ function jagged(x0,y0,x1,y1,segs,amp,lip){
   }
   return d;
 }
+/* contorno arredondado com pequenas arestas — nada de círculo perfeito */
+function holeShape(cx,cy,rad,n,rough){
+  n=n||15;rough=rough===undefined?.22:rough;
+  const step=Math.PI*2/n;let d='';
+  for(let i=0;i<n;i++){
+    const a=step*i+(Math.random()-.5)*step*.34;
+    const rr=rad*(1-rough*.5+Math.random()*rough);
+    d+=(i?' L':'M')+(cx+Math.cos(a)*rr).toFixed(1)+','+(cy+Math.sin(a)*rr).toFixed(1);
+  }
+  return d+' Z';
+}
 function draw(path,dur,delay,easing){
   const L=path.getTotalLength();
   path.setAttribute('stroke-dasharray',L);
@@ -1733,7 +1744,8 @@ function clearShots(){
   $$('.hero-title .ch.struck').forEach(c=>c.classList.remove('struck'));
 }
 
-function impact(x,y,el){
+function impact(x,y,el,rad){
+  rad=rad||16;
   const W=innerWidth,H=innerHeight;
   const svg=mk('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'none'});
   const g=mk('g',{});svg.appendChild(g);
@@ -1769,24 +1781,35 @@ function impact(x,y,el){
   /* 2 — trincas radiais */
   const nC=7;
   for(let i=0;i<nC;i++){
-    const a=(Math.PI*2/nC)*i+Math.random()*.5,len=60+Math.random()*120;
-    const dd=jagged(x,y,x+Math.cos(a)*len,y+Math.sin(a)*len,4,10);
+    const a=(Math.PI*2/nC)*i+Math.random()*.5,len=rad*3+Math.random()*rad*6;
+    const sx=x+Math.cos(a)*rad*.9,sy=y+Math.sin(a)*rad*.9; /* trinca nasce na borda do furo */
+    const dd=jagged(sx,sy,x+Math.cos(a)*len,y+Math.sin(a)*len,4,10);
     const c=mk('path',{d:dd,fill:'none',stroke:'#8A9C86','stroke-width':1.4,opacity:.7});
     g.appendChild(c);draw(c,300,60+i*18);
   }
 
-  /* 3 — furo e anel de choque */
-  const hole=mk('circle',{cx:x,cy:y,r:15,fill:'#05080A',stroke:'#F59E0B','stroke-width':2});
+  /* 3 — furo recortado (do tamanho da letra) e anel de choque */
+  const hole=mk('path',{d:holeShape(x,y,rad,20,.15),fill:'#05080A',
+    stroke:'#F59E0B','stroke-width':2,'stroke-linejoin':'round'});
   hole.style.transformBox='fill-box';hole.style.transformOrigin='center';
   g.appendChild(hole);
-  if(!REDUCE)hole.animate([{transform:'scale(0)'},{transform:'scale(1.35)',offset:.45},{transform:'scale(1)'}],
-    {duration:280,easing:'cubic-bezier(.2,1.4,.4,1)',fill:'forwards'});
+  if(!REDUCE)hole.animate([{transform:'scale(0)'},{transform:'scale(1.3)',offset:.45},{transform:'scale(1)'}],
+    {duration:300,easing:'cubic-bezier(.2,1.4,.4,1)',fill:'forwards'});
 
-  const ring=mk('circle',{cx:x,cy:y,r:15,fill:'none',stroke:'#F59E0B','stroke-width':2.5});
+  /* bisel interno: dá espessura à chapa furada */
+  const bevel=mk('path',{d:holeShape(x,y,rad*.76,18,.2),fill:'none',
+    stroke:'rgba(245,158,11,.42)','stroke-width':1.1,'stroke-linejoin':'round'});
+  bevel.style.transformBox='fill-box';bevel.style.transformOrigin='center';
+  g.appendChild(bevel);
+  if(!REDUCE)bevel.animate([{transform:'scale(0)',opacity:0},{transform:'scale(1)',opacity:1}],
+    {duration:320,delay:60,easing:'cubic-bezier(.2,1.2,.4,1)',fill:'forwards'});
+
+  const ring=mk('path',{d:holeShape(x,y,rad,18,.12),fill:'none',
+    stroke:'#F59E0B','stroke-width':2.5,'stroke-linejoin':'round'});
   ring.style.transformBox='fill-box';ring.style.transformOrigin='center';
   g.appendChild(ring);
-  if(!REDUCE)ring.animate([{transform:'scale(1)',opacity:.9},{transform:'scale(4.2)',opacity:0}],
-    {duration:620,easing:'cubic-bezier(.1,.8,.2,1)',fill:'forwards'});
+  if(!REDUCE)ring.animate([{transform:'scale(1)',opacity:.9},{transform:'scale(3.6)',opacity:0}],
+    {duration:640,easing:'cubic-bezier(.1,.8,.2,1)',fill:'forwards'});
 
   /* 4 — clarão do impacto */
   const fg=mk('radialGradient',{id:uid+'f'});
@@ -1794,7 +1817,7 @@ function impact(x,y,el){
   fg.appendChild(mk('stop',{offset:'.35','stop-color':'#FFD98A','stop-opacity':'.85'}));
   fg.appendChild(mk('stop',{offset:'1','stop-color':'#F59E0B','stop-opacity':'0'}));
   defs.appendChild(fg);
-  const flash=mk('circle',{cx:x,cy:y,r:30,fill:'url(#'+uid+'f)'});
+  const flash=mk('circle',{cx:x,cy:y,r:rad*2,fill:'url(#'+uid+'f)'});
   flash.style.transformBox='fill-box';flash.style.transformOrigin='center';
   g.appendChild(flash);
   if(!REDUCE)flash.animate([{transform:'scale(.2)',opacity:1},{transform:'scale(3.4)',opacity:0}],
@@ -1827,7 +1850,9 @@ function fireAt(id,delay){
     const el=$('#'+id);if(!el||!slides[0].classList.contains('active'))return;
     const r=el.getBoundingClientRect();
     if(!r.width)return;
-    impact(r.left+r.width*.52,r.top+r.height*.52,el);
+    /* o furo acompanha o corpo da letra atingida */
+    const rad=Math.max(15,Math.min(r.width,r.height)*.66);
+    impact(r.left+r.width*.5,r.top+r.height*.52,el,rad);
   },delay));
 }
 /* o título termina de pousar por volta de 1,8s — os tiros vêm logo depois */
